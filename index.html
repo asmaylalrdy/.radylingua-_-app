@@ -1,13 +1,2163 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-    <title>Radylingua App</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>RadyLingua - رضي لينجوا</title>
+
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+<style>
+:root{
+    --primary:#2563eb;
+    --primary2:#4f46e5;
+    --purple:#7c3aed;
+    --green:#16a34a;
+    --orange:#f97316;
+    --pink:#ec4899;
+    --bg:#f4f7ff;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --dark:#111827;
+}
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
+    font-family:Arial,"Noto Sans Arabic",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+body{
+    overflow-x:hidden;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+}
+
+#app{
+    min-height:100vh;
+}
+
+.screen{
+    display:none;
+    min-height:100vh;
+    padding-bottom:90px;
+}
+
+.screen.active{
+    display:block;
+}
+
+/* ---------------- Welcome ---------------- */
+
+.welcome{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+    text-align:center;
+    background:
+        radial-gradient(circle at top,#dbeafe,transparent 45%),
+        linear-gradient(180deg,#ffffff,#eef4ff);
+}
+
+.logo{
+    width:105px;
+    height:105px;
+    border-radius:30px;
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:52px;
+    box-shadow:0 15px 35px rgba(37,99,235,.25);
+    margin-bottom:25px;
+}
+
+.logo.small{
+    width:55px;
+    height:55px;
+    border-radius:17px;
+    font-size:28px;
+    margin:0;
+}
+
+.welcome h1{
+    font-size:34px;
+    margin:8px 0;
+}
+
+.welcome p{
+    color:var(--muted);
+    line-height:1.8;
+    max-width:350px;
+}
+
+.primary-btn{
+    border:0;
+    color:white;
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    padding:15px 28px;
+    border-radius:14px;
+    font-size:17px;
+    font-weight:bold;
+    width:100%;
+    max-width:350px;
+    margin-top:20px;
+    box-shadow:0 8px 20px rgba(37,99,235,.2);
+}
+
+.secondary-btn{
+    border:1px solid var(--border);
+    background:white;
+    color:var(--text);
+    padding:13px 20px;
+    border-radius:13px;
+    font-size:16px;
+}
+
+/* ---------------- Language ---------------- */
+
+.language-box{
+    max-width:420px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+.language-box h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.language-option{
+    width:100%;
+    background:white;
+    border:2px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    margin:10px 0;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.language-option:hover,
+.language-option.selected{
+    border-color:var(--primary);
+    background:#eff6ff;
+}
+
+.flag{
+    font-size:32px;
+}
+
+/* ---------------- Header ---------------- */
+
+.topbar{
+    background:white;
+    padding:18px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:23px;
+}
+
+.pi-balance{
+    background:#fff7c2;
+    padding:9px 13px;
+    border-radius:14px;
+    font-weight:bold;
+}
+
+/* ---------------- Content ---------------- */
+
+.content{
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    padding:16px;
+}
+
+.greeting{
+    margin:5px 0 15px;
+}
+
+.greeting h2{
+    margin:0 0 5px;
+}
+
+.muted{
+    color:var(--muted);
+}
+
+/* ---------------- Cards ---------------- */
+
+.card{
+    background:var(--card);
+    border-radius:20px;
+    padding:18px;
+    margin:14px 0;
+    box-shadow:0 5px 20px rgba(15,23,42,.06);
+    border:1px solid #edf0f5;
+}
+
+.gradient-card{
+    color:white;
+    border:0;
+    background:linear-gradient(135deg,#f97316,#ef4444);
+}
+
+.purple-card{
+    color:white;
+    border:0;
+    background:linear-gradient(135deg,#9333ea,#ec4899);
+}
+
+.card-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.stat{
+    background:white;
+    border-radius:16px;
+    padding:14px 8px;
+    text-align:center;
+    border:1px solid var(--border);
+}
+
+.stat strong{
+    display:block;
+    font-size:20px;
+}
+
+.stat span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.progress{
+    height:10px;
+    background:#e5e7eb;
+    border-radius:20px;
+    overflow:hidden;
+    margin:12px 0;
+}
+
+.progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,#2563eb,#7c3aed);
+    border-radius:20px;
+}
+
+.action-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.action{
+    min-height:100px;
+    border:0;
+    border-radius:18px;
+    padding:15px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.action.blue{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.action.green{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.action.orange{
+    background:#ffedd5;
+    color:#c2410c;
+}
+
+.action.purple{
+    background:#f3e8ff;
+    color:#7e22ce;
+}
+
+/* ---------------- Lessons ---------------- */
+
+.lesson{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:17px;
+    margin:12px 0;
+}
+
+.lesson-number{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#3b82f6;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.lesson h3{
+    margin:0;
+}
+
+.lesson-meta{
+    color:var(--muted);
+    font-size:14px;
+    margin-top:6px;
+}
+
+.lesson-btn{
+    border:0;
+    background:#111827;
+    color:white;
+    padding:11px 17px;
+    border-radius:11px;
+    margin-top:12px;
+}
+
+.speak-btn{
+    border:1px solid #bfdbfe;
+    background:#eff6ff;
+    color:#2563eb;
+    padding:9px 13px;
+    border-radius:10px;
+}
+
+/* ---------------- Challenge ---------------- */
+
+.challenge{
+    background:linear-gradient(135deg,#7c3aed,#ec4899);
+    color:white;
+    border-radius:22px;
+    padding:20px;
+}
+
+.challenge button{
+    background:white;
+    color:#7c3aed;
+    border:0;
+    border-radius:12px;
+    padding:12px 20px;
+    font-weight:bold;
+}
+
+/* ---------------- Chat ---------------- */
+
+.chat-box{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.message{
+    max-width:85%;
+    padding:13px 15px;
+    border-radius:17px;
+    line-height:1.6;
+}
+
+.bot{
+    background:white;
+    border:1px solid var(--border);
+    align-self:flex-start;
+}
+
+.user{
+    background:#2563eb;
+    color:white;
+    align-self:flex-end;
+}
+
+.chat-input{
+    position:fixed;
+    bottom:70px;
+    left:0;
+    right:0;
+    background:white;
+    border-top:1px solid var(--border);
+    padding:10px;
+    display:none;
+    z-index:30;
+}
+
+.chat-input.active{
+    display:flex;
+    gap:8px;
+}
+
+.chat-input input{
+    flex:1;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:12px;
+    font-size:16px;
+    outline:none;
+}
+
+.chat-input button{
+    width:50px;
+    border:0;
+    border-radius:13px;
+    background:#2563eb;
+    color:white;
+}
+
+/* ---------------- Store ---------------- */
+
+.product{
+    background:white;
+    border-radius:20px;
+    padding:18px;
+    margin:14px 0;
+    border:1px solid var(--border);
+}
+
+.product-icon{
+    width:65px;
+    height:65px;
+    border-radius:16px;
+    background:#eef2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+}
+
+.pi-price{
+    font-size:25px;
+    font-weight:bold;
+    color:#b8860b;
+}
+
+.buy-btn{
+    background:#111827;
+    color:white;
+    border:0;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:bold;
+}
+
+/* ---------------- Settings ---------------- */
+
+.setting{
+    background:white;
+    padding:17px;
+    border-radius:16px;
+    border:1px solid var(--border);
+    margin:10px 0;
+}
+
+.setting button{
+    border:0;
+    background:#eff6ff;
+    color:#2563eb;
+    padding:9px 15px;
+    border-radius:10px;
+}
+
+/* ---------------- Bottom Navigation ---------------- */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:72px;
+    background:white;
+    border-top:1px solid var(--border);
+    display:none;
+    grid-template-columns:repeat(5,1fr);
+    z-index:50;
+    padding-bottom:env(safe-area-inset-bottom);
+}
+
+.bottom-nav.active{
+    display:grid;
+}
+
+.nav-btn{
+    border:0;
+    background:white;
+    color:#6b7280;
+    font-size:11px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+}
+
+.nav-btn .icon{
+    font-size:22px;
+}
+
+.nav-btn.active{
+    color:#2563eb;
+    font-weight:bold;
+}
+
+/* ---------------- Toast ---------------- */
+
+.toast{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%) translateY(-120px);
+    background:#111827;
+    color:white;
+    padding:13px 18px;
+    border-radius:13px;
+    z-index:100;
+    transition:.3s;
+    max-width:90%;
+    text-align:center;
+}
+
+.toast.show{
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ---------------- Modal ---------------- */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:90;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:600px;
+    border-radius:25px 25px 0 0;
+    padding:25px;
+    max-height:85vh;
+    overflow:auto;
+}
+
+.close{
+    float:left;
+    border:0;
+    background:#f3f4f6;
+    border-radius:50%;
+    width:35px;
+    height:35px;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media(min-width:700px){
+    .bottom-nav{
+        max-width:700px;
+        margin:auto;
+        left:50%;
+        transform:translateX(-50%);
+        border-radius:20px 20px 0 0;
+    }
+}
+
+@media(max-width:380px){
+    .content{
+        padding:12px;
+    }
+
+    .stats{
+        gap:6px;
+    }
+
+    .stat{
+        padding:11px 5px;
+    }
+
+    .action-grid{
+        gap:8px;
+    }
+}
+</style>
 </head>
+
 <body>
-    <h1>مرحباً بك في Radylingua</h1>
-    <script>
-        window.Pi.init({ version: "2.0", sandbox: true });
-    </script>
+
+<div id="app">
+
+<!-- ================= WELCOME ================= -->
+
+<section id="welcomeScreen" class="screen active">
+    <div class="welcome">
+
+        <div class="logo">📖</div>
+
+        <h1>RadyLingua</h1>
+
+        <p>
+            رضي لينجوا<br>
+            تعلم الإنجليزية بطريقة ذكية،
+            بسيطة وممتعة باستخدام الذكاء الاصطناعي.
+        </p>
+
+        <button class="primary-btn" onclick="showLanguage()">
+            ابدأ الآن
+        </button>
+
+    </div>
+</section>
+
+
+<!-- ================= LANGUAGE ================= -->
+
+<section id="languageScreen" class="screen">
+
+    <div class="language-box">
+
+        <div style="text-align:center;margin-top:40px;">
+            <div class="logo" style="margin:auto;">🌐</div>
+        </div>
+
+        <h2 id="languageTitle">اختر لغة التطبيق</h2>
+
+        <button class="language-option" onclick="selectLanguage('ar')">
+            <span class="flag">🇸🇩</span>
+            <span>العربية</span>
+        </button>
+
+        <button class="language-option" onclick="selectLanguage('en')">
+            <span class="flag">🇺🇸</span>
+            <span>English</span>
+        </button>
+
+        <p class="muted" style="text-align:center;margin-top:25px;">
+            يمكنك تغيير اللغة لاحقًا من الإعدادات.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= MAIN APP ================= -->
+
+<div id="mainApp" style="display:none;">
+
+    <!-- HOME -->
+
+    <section id="homeScreen" class="screen active">
+
+        <header class="topbar">
+
+            <div class="profile">
+                <div class="avatar">📖</div>
+
+                <div>
+                    <strong>RadyLingua</strong>
+                    <div class="muted" id="welcomeUser">
+                        أهلاً بك 👋
+                    </div>
+                </div>
+            </div>
+
+            <div class="pi-balance">
+                π <span id="piBalance">0.00</span>
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <div class="greeting">
+                <h2 id="homeTitle">مرحباً بك في رضي لينجوا 👋</h2>
+                <div class="muted" id="homeSubtitle">
+                    واصل رحلة تعلم الإنجليزية
+                </div>
+            </div>
+
+
+            <!-- Progress -->
+
+            <div class="card gradient-card">
+
+                <div class="row">
+
+                    <div>
+                        <div style="font-size:15px;">
+                            المستوى
+                        </div>
+
+                        <div style="font-size:34px;font-weight:bold;">
+                            3
+                        </div>
+                    </div>
+
+                    <div style="font-size:48px;">
+                        🔥
+                    </div>
+
+                </div>
+
+                <div style="margin-top:8px;">
+                    7 أيام متتالية
+                </div>
+
+                <div class="progress" style="background:rgba(255,255,255,.35);">
+                    <div class="progress-fill"
+                         style="width:65%;background:white;">
+                    </div>
+                </div>
+
+                <small>
+                    استمر! أنت تبلي بلاءً حسناً.
+                </small>
+
+            </div>
+
+
+            <!-- Stats -->
+
+            <div class="stats">
+
+                <div class="stat">
+                    <strong id="xpValue">1250</strong>
+                    <span>XP</span>
+                </div>
+
+                <div class="stat">
+                    <strong>7</strong>
+                    <span>أيام</span>
+                </div>
+
+                <div class="stat">
+                    <strong id="lessonCount">3</strong>
+                    <span>دروس</span>
+                </div>
+
+            </div>
+
+
+            <!-- Challenge -->
+
+            <div class="challenge">
+
+                <div style="font-size:14px;">
+                    ⚡ تحدي اليوم
+                </div>
+
+                <h2>
+                    ترجم الجملة
+                </h2>
+
+                <p style="font-size:18px;">
+                    I am learning English every day.
+                </p>
+
+                <button onclick="startChallenge()">
+                    ابدأ التحدي
+                </button>
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div class="action-grid">
+
+                <button class="action blue"
+                        onclick="openScreen('lessonsScreen')">
+                    📚<br>
+                    متابعة الدروس
+                </button>
+
+                <button class="action green"
+                        onclick="openScreen('chatScreen')">
+                    🤖<br>
+                    AI Chat
+                </button>
+
+                <button class="action orange"
+                        onclick="openScreen('achievementsScreen')">
+                    🏆<br>
+                    إنجازاتي
+                </button>
+
+                <button class="action purple"
+                        onclick="openScreen('storeScreen')">
+                    🛒<br>
+                    متجر RadyLingua
+                </button>
+
+            </div>
+
+
+            <!-- Daily lesson -->
+
+            <div class="card">
+
+                <div class="row">
+                    <div class="card-title">
+                        درس اليوم
+                    </div>
+
+                    <button class="secondary-btn"
+                            onclick="openScreen('lessonsScreen')">
+                        عرض الكل
+                    </button>
+                </div>
+
+                <div class="lesson">
+
+                    <div class="row">
+
+                        <div class="lesson-number">
+                            1
+                        </div>
+
+                        <div style="flex:1;">
+                            <h3>
+                                التحيات الأساسية
+                            </h3>
+
+                            <div class="lesson-meta">
+                                مبتدئ • 5:30 دقيقة • 50 XP
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-fill"
+                             style="width:100%;">
+                        </div>
+                    </div>
+
+                    <button class="lesson-btn"
+                            onclick="completeLesson(this)">
+                        مراجعة الدرس
+                    </button>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <!-- LESSONS -->
+
+    <section id="lessonsScreen" class="screen">
+
+        <header class="topbar">
+            <div>
+                <strong>📚 الدروس</strong>
+            </div>
+            <button class="secondary-btn"
+                    onclick="openScreen('homeScreen')">
+                الرئيسية
+            </button>
+        </header>
+
+        <main class="content">
+
+            <h2>مسار التعلم</h2>
+
+            <div class="card">
+                <strong>المستوى المبتدئ</strong>
+                <div class="progress">
+                    <div class="progress-fill"
+                         style="width:75%;">
+                    </div>
+                </div>
+                <span class="muted">75% مكتمل</span>
+            </div>
+
+
+            <div class="lesson">
+
+                <div class="row">
+
+                    <div class="lesson-number">1</div>
+
+                    <div style="flex:1;">
+                        <h3>التحيات الأساسية</h3>
+
+                        <div class="lesson-meta">
+                            مبتدئ • 5:30 • 50 XP
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <p>
+                    My name is
+                    <button class="speak-btn"
+                            onclick="speak('My name is')">
+                        🔊 نطق
+                    </button>
+                </p>
+
+                <p>
+                    Nice to meet you
+                    <button class="speak-btn"
+                            onclick="speak('Nice to meet you')">
+                        🔊 نطق
+                    </button>
+                </p>
+
+                <button class="lesson-btn"
+                        onclick="completeLesson(this)">
+                    ابدأ الدرس
+                </button>
+
+            </div>
+
+
+            <div class="lesson">
+
+                <div class="row">
+
+                    <div class="lesson-number">2</div>
+
+                    <div style="flex:1;">
+                        <h3>التعريف بالنفس</h3>
+
+                        <div class="lesson-meta">
+                            مبتدئ • 7:15 • 40 XP
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <p>
+                    I am from
+                    <button class="speak-btn"
+                            onclick="speak('I am from')">
+                        🔊 نطق
+                    </button>
+                </p>
+
+                <button class="lesson-btn"
+                        onclick="completeLesson(this)">
+                    ابدأ الدرس
+                </button>
+
+            </div>
+
+
+            <div class="lesson">
+
+                <div class="row">
+
+                    <div class="lesson-number">3</div>
+
+                    <div style="flex:1;">
+                        <h3>المحادثات اليومية</h3>
+
+                        <div class="lesson-meta">
+                            متوسط • 10:45 • 25 XP
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <p>
+                    How are you?
+                    <button class="speak-btn"
+                            onclick="speak('How are you?')">
+                        🔊 نطق
+                    </button>
+                </p>
+
+                <p>
+                    What's up?
+                    <button class="speak-btn"
+                            onclick="speak('What is up?')">
+                        🔊 نطق
+                    </button>
+                </p>
+
+                <button class="lesson-btn"
+                        onclick="completeLesson(this)">
+                    ابدأ الدرس
+                </button>
+
+            </div>
+
+
+            <div class="lesson">
+
+                <div class="row">
+
+                    <div class="lesson-number"
+                         style="background:#9ca3af;">
+                        4
+                    </div>
+
+                    <div style="flex:1;">
+                        <h3>الإنجليزية التجارية</h3>
+
+                        <div class="lesson-meta">
+                            متقدم • 15:20 • 50 XP
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="lesson-btn"
+                        onclick="showToast('هذا الدرس متاح قريبًا')">
+                    قريبًا
+                </button>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <!-- CHAT -->
+
+    <section id="chatScreen" class="screen">
+
+        <header class="topbar">
+
+            <div>
+                <strong>🤖 AI Chat</strong>
+                <div class="muted">
+                    تدرب على المحادثة
+                </div>
+            </div>
+
+        </header>
+
+        <main class="content">
+
+            <div class="card">
+
+                <h3>
+                    اختر موقفًا للتدرب عليه
+                </h3>
+
+                <div class="action-grid">
+
+                    <button class="action blue"
+                            onclick="startChat('doctor')">
+                        🏥<br>
+                        زيارة الطبيب
+                    </button>
+
+                    <button class="action green"
+                            onclick="startChat('shopping')">
+                        🛍️<br>
+                        التسوق
+                    </button>
+
+                    <button class="action orange"
+                            onclick="startChat('hotel')">
+                        🏨<br>
+                        الفندق والسفر
+                    </button>
+
+                    <button class="action purple"
+                            onclick="startChat('job')">
+                        💼<br>
+                        مقابلة عمل
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="chatMessages" class="chat-box">
+
+                <div class="message bot">
+                    👋 مرحباً! أنا مساعد RadyLingua.
+                    اختر موقفًا وابدأ التدريب باللغة الإنجليزية.
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <!-- ACHIEVEMENTS -->
+
+    <section id="achievementsScreen" class="screen">
+
+        <header class="topbar">
+            <strong>🏆 إنجازاتي</strong>
+        </header>
+
+        <main class="content">
+
+            <div class="card">
+
+                <h2>إحصائيات التعلم</h2>
+
+                <div class="stats">
+
+                    <div class="stat">
+                        <strong>1250</strong>
+                        <span>XP</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong>7</strong>
+                        <span>أيام متتالية</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong id="completedLessons">
+                            3
+                        </strong>
+                        <span>دروس مكتملة</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>الشارات</h3>
+
+                <div class="action-grid">
+
+                    <div class="action orange">
+                        🔥<br>
+                        بداية قوية
+                    </div>
+
+                    <div class="action blue">
+                        📚<br>
+                        محب التعلم
+                    </div>
+
+                    <div class="action green">
+                        🗣️<br>
+                        متحدث
+                    </div>
+
+                    <div class="action purple">
+                        ⭐<br>
+                        1000 XP
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <!-- STORE -->
+
+    <section id="storeScreen" class="screen">
+
+        <header class="topbar">
+
+            <div>
+                <strong>🛒 متجر RadyLingua</strong>
+                <div class="muted">
+                    منتجات تعليمية مميزة
+                </div>
+            </div>
+
+            <div class="pi-balance">
+                π <span>0.00</span>
+            </div>
+
+        </header>
+
+        <main class="content">
+
+            <div class="card purple-card">
+
+                <h2>RadyLingua Premium</h2>
+
+                <p>
+                    افتح محتوى تعليميًا متقدمًا
+                    وميزات إضافية.
+                </p>
+
+                <strong style="font-size:25px;">
+                    40 π
+                </strong>
+
+            </div>
+
+
+            <div class="product">
+
+                <div class="row">
+
+                    <div class="product-icon">
+                        📘
+                    </div>
+
+                    <div style="flex:1;">
+                        <h3>
+                            دليل المحادثة التفاعلي
+                        </h3>
+
+                        <p class="muted">
+                            كتاب تعليمي مع تدريبات
+                            للمحادثة اليومية.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="row" style="margin-top:15px;">
+
+                    <span class="pi-price">
+                        10 π
+                    </span>
+
+                    <button class="buy-btn"
+                            onclick="buyProduct('دليل المحادثة التفاعلي',10)">
+                        اشترِ بـ π
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="product">
+
+                <div class="row">
+
+                    <div class="product-icon">
+                        🎓
+                    </div>
+
+                    <div style="flex:1;">
+                        <h3>
+                            كورس الإنجليزية الشاملة
+                        </h3>
+
+                        <p class="muted">
+                            دروس وكورسات متقدمة
+                            لدعم رحلة التعلم.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="row" style="margin-top:15px;">
+
+                    <span class="pi-price">
+                        40 π
+                    </span>
+
+                    <button class="buy-btn"
+                            onclick="buyProduct('كورس الإنجليزية الشاملة',40)">
+                        اشترِ بـ π
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="product">
+
+                <div class="row">
+
+                    <div class="product-icon">
+                        🗣️
+                    </div>
+
+                    <div style="flex:1;">
+                        <h3>
+                            تدريب النطق بالذكاء الاصطناعي
+                        </h3>
+
+                        <p class="muted">
+                            تدريب متخصص على النطق
+                            والمحادثة.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="row" style="margin-top:15px;">
+
+                    <span class="pi-price">
+                        16 π
+                    </span>
+
+                    <button class="buy-btn"
+                            onclick="buyProduct('تدريب النطق بالذكاء الاصطناعي',16)">
+                        اشترِ بـ π
+                    </button>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <!-- SETTINGS -->
+
+    <section id="settingsScreen" class="screen">
+
+        <header class="topbar">
+            <strong>⚙️ الإعدادات</strong>
+        </header>
+
+        <main class="content">
+
+            <div class="setting">
+                <div class="row">
+                    <strong>🌐 لغة التطبيق</strong>
+                    <button onclick="changeLanguage()">
+                        تغيير
+                    </button>
+                </div>
+            </div>
+
+            <div class="setting">
+                <strong>🔒 سياسة الخصوصية</strong>
+                <p class="muted">
+                    RadyLingua يحترم خصوصية المستخدم
+                    ولا يطلب بيانات غير ضرورية.
+                </p>
+            </div>
+
+            <div class="setting">
+                <strong>📄 شروط الاستخدام</strong>
+                <p class="muted">
+                    استخدام التطبيق يعني الموافقة
+                    على شروط RadyLingua.
+                </p>
+            </div>
+
+            <div class="setting">
+                <strong>ℹ️ حول RadyLingua</strong>
+                <p class="muted">
+                    تطبيق تعليمي ذكي لتعلم اللغات
+                    بطريقة بسيطة وتفاعلية.
+                </p>
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <!-- BOTTOM NAV -->
+
+    <nav id="bottomNav" class="bottom-nav">
+
+        <button class="nav-btn active"
+                data-screen="homeScreen"
+                onclick="openScreen('homeScreen')">
+            <span class="icon">🏠</span>
+            الرئيسية
+        </button>
+
+        <button class="nav-btn"
+                data-screen="lessonsScreen"
+                onclick="openScreen('lessonsScreen')">
+            <span class="icon">📚</span>
+            الدروس
+        </button>
+
+        <button class="nav-btn"
+                data-screen="chatScreen"
+                onclick="openScreen('chatScreen')">
+            <span class="icon">💬</span>
+            AI Chat
+        </button>
+
+        <button class="nav-btn"
+                data-screen="achievementsScreen"
+                onclick="openScreen('achievementsScreen')">
+            <span class="icon">🏆</span>
+            إنجازاتي
+        </button>
+
+        <button class="nav-btn"
+                data-screen="storeScreen"
+                onclick="openScreen('storeScreen')">
+            <span class="icon">🛒</span>
+            المتجر
+        </button>
+
+    </nav>
+
+
+    <!-- CHAT INPUT -->
+
+    <div id="chatInput" class="chat-input">
+
+        <input id="messageInput"
+               type="text"
+               placeholder="اكتب رسالتك بالإنجليزية...">
+
+        <button onclick="sendMessage()">
+            ➤
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toast" class="toast"></div>
+
+
+<!-- CHALLENGE MODAL -->
+
+<div id="challengeModal" class="modal">
+
+    <div class="modal-box">
+
+        <button class="close"
+                onclick="closeModal('challengeModal')">
+            ×
+        </button>
+
+        <h2>⚡ تحدي اليوم</h2>
+
+        <p>
+            ترجم الجملة التالية إلى العربية:
+        </p>
+
+        <div class="card"
+             style="font-size:20px;text-align:center;">
+            I am learning English every day.
+        </div>
+
+        <input id="challengeAnswer"
+               type="text"
+               placeholder="اكتب إجابتك هنا..."
+               style="
+               width:100%;
+               padding:14px;
+               border:1px solid #ddd;
+               border-radius:12px;
+               font-size:16px;">
+
+        <button class="primary-btn"
+                onclick="checkChallenge()">
+            تحقق من الإجابة
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   RadyLingua Application Core
+   ========================================================= */
+
+let currentLanguage =
+    localStorage.getItem("rady_language") || null;
+
+let completedLessons =
+    Number(localStorage.getItem("rady_completed_lessons") || 3);
+
+
+/* ---------------- Pi SDK ---------------- */
+
+let piInitialized = false;
+
+try{
+
+    if(window.Pi){
+
+        window.Pi.init({
+            version:"2.0",
+            sandbox:true
+        });
+
+        piInitialized = true;
+
+        console.log("RadyLingua: Pi SDK initialized.");
+
+    }
+
+}catch(error){
+
+    console.log("Pi SDK initialization error:",error);
+
+}
+
+
+/* ---------------- Startup ---------------- */
+
+window.addEventListener("load",function(){
+
+    if(currentLanguage){
+
+        startApplication();
+
+    }else{
+
+        showLanguage();
+
+    }
+
+});
+
+
+/* ---------------- Navigation ---------------- */
+
+function hideAllScreens(){
+
+    document.querySelectorAll(".screen")
+    .forEach(screen=>{
+        screen.classList.remove("active");
+    });
+
+}
+
+
+function openScreen(id){
+
+    hideAllScreens();
+
+    const screen =
+        document.getElementById(id);
+
+    if(screen){
+
+        screen.classList.add("active");
+
+    }
+
+    document.querySelectorAll(".nav-btn")
+    .forEach(btn=>{
+
+        btn.classList.remove("active");
+
+        if(btn.dataset.screen === id){
+
+            btn.classList.add("active");
+
+        }
+
+    });
+
+    const chatInput =
+        document.getElementById("chatInput");
+
+    if(chatInput){
+
+        if(id === "chatScreen"){
+
+            chatInput.classList.add("active");
+
+        }else{
+
+            chatInput.classList.remove("active");
+
+        }
+
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* ---------------- Language ---------------- */
+
+function showLanguage(){
+
+    hideAllScreens();
+
+    document
+        .getElementById("languageScreen")
+        .classList.add("active");
+
+}
+
+
+function selectLanguage(language){
+
+    currentLanguage = language;
+
+    localStorage.setItem(
+        "rady_language",
+        language
+    );
+
+    startApplication();
+
+}
+
+
+function changeLanguage(){
+
+    localStorage.removeItem("rady_language");
+
+    currentLanguage = null;
+
+    document
+        .getElementById("mainApp")
+        .style.display="none";
+
+    document
+        .getElementById("bottomNav")
+        .classList.remove("active");
+
+    showLanguage();
+
+}
+
+
+function startApplication(){
+
+    document
+        .getElementById("welcomeScreen")
+        .classList.remove("active");
+
+    document
+        .getElementById("languageScreen")
+        .classList.remove("active");
+
+    document
+        .getElementById("mainApp")
+        .style.display="block";
+
+    document
+        .getElementById("bottomNav")
+        .classList.add("active");
+
+    applyLanguageDirection();
+
+    openScreen("homeScreen");
+
+}
+
+
+/* ---------------- RTL ---------------- */
+
+function applyLanguageDirection(){
+
+    const html =
+        document.documentElement;
+
+    if(currentLanguage === "en"){
+
+        html.lang="en";
+        html.dir="ltr";
+
+        document.body.style.direction="ltr";
+
+    }else{
+
+        html.lang="ar";
+        html.dir="rtl";
+
+        document.body.style.direction="rtl";
+
+    }
+
+}
+
+
+/* ---------------- Toast ---------------- */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+
+        toast.classList.remove("show");
+
+    },2500);
+
+}
+
+
+/* ---------------- Lessons ---------------- */
+
+function completeLesson(button){
+
+    completedLessons++;
+
+    localStorage.setItem(
+        "rady_completed_lessons",
+        completedLessons
+    );
+
+    document.getElementById(
+        "completedLessons"
+    ).textContent=completedLessons;
+
+    document.getElementById(
+        "lessonCount"
+    ).textContent=completedLessons;
+
+    button.textContent="✓ مكتمل";
+
+    button.disabled=true;
+
+    button.style.background="#16a34a";
+
+    showToast(
+        "أحسنت! تم تسجيل إكمال الدرس 🎉"
+    );
+
+}
+
+
+/* ---------------- Speech ---------------- */
+
+function speak(text){
+
+    if(!("speechSynthesis" in window)){
+
+        showToast(
+            "ميزة النطق غير متاحة في هذا المتصفح."
+        );
+
+        return;
+
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+    utterance.lang="en-US";
+
+    utterance.rate=.85;
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+
+/* ---------------- Challenge ---------------- */
+
+function startChallenge(){
+
+    document
+        .getElementById("challengeModal")
+        .classList.add("show");
+
+}
+
+
+function closeModal(id){
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+function checkChallenge(){
+
+    const input =
+        document
+        .getElementById("challengeAnswer");
+
+    const answer =
+        input.value.trim().toLowerCase();
+
+    if(
+        answer.includes("أتعلم الإنجليزية") ||
+        answer.includes("اتعلم الانجليزية") ||
+        answer.includes("اتعلم الإنجليزية") ||
+        answer.includes("أتعلم الانجليزية")
+    ){
+
+        closeModal("challengeModal");
+
+        showToast(
+            "إجابة صحيحة! حصلت على XP 🎉"
+        );
+
+        return;
+
+    }
+
+    showToast(
+        "حاول مرة أخرى. فكر في معنى الجملة."
+    );
+
+}
+
+
+/* ---------------- AI Chat ---------------- */
+
+const chatScenarios={
+
+    doctor:{
+        bot:
+        "Hello! Welcome to the clinic. How can I help you today?"
+    },
+
+    shopping:{
+        bot:
+        "Hello! Can I help you find something?"
+    },
+
+    hotel:{
+        bot:
+        "Welcome to our hotel. Do you have a reservation?"
+    },
+
+    job:{
+        bot:
+        "Good morning. Please tell me a little about yourself."
+    }
+
+};
+
+
+function startChat(type){
+
+    openScreen("chatScreen");
+
+    const messages =
+        document.getElementById(
+            "chatMessages"
+        );
+
+    messages.innerHTML="";
+
+    const message =
+        document.createElement("div");
+
+    message.className="message bot";
+
+    message.textContent =
+        chatScenarios[type].bot;
+
+    messages.appendChild(message);
+
+    speak(chatScenarios[type].bot);
+
+}
+
+
+function sendMessage(){
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+    const text =
+        input.value.trim();
+
+    if(!text){
+
+        return;
+
+    }
+
+    const messages =
+        document.getElementById(
+            "chatMessages"
+        );
+
+
+    const userMessage =
+        document.createElement("div");
+
+    userMessage.className="message user";
+
+    userMessage.textContent=text;
+
+    messages.appendChild(userMessage);
+
+
+    input.value="";
+
+
+    /*
+       Temporary local AI response.
+
+       In the next development stage this
+       will be connected to the actual AI
+       backend instead of pretending that
+       this local response is a real AI API.
+    */
+
+    setTimeout(()=>{
+
+        const botMessage =
+            document.createElement("div");
+
+        botMessage.className="message bot";
+
+        botMessage.textContent =
+            "Great! Keep practicing your English. Tell me more about that.";
+
+        messages.appendChild(botMessage);
+
+        messages.scrollIntoView({
+            behavior:"smooth",
+            block:"end"
+        });
+
+    },600);
+
+}
+
+
+/* ---------------- Pi Payment ---------------- */
+
+function buyProduct(productName,price){
+
+    if(!window.Pi){
+
+        showToast(
+            "Pi SDK غير متاح حاليًا."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANT:
+
+       This function is prepared for Pi
+       Payments.
+
+       The real Mainnet payment flow must
+       use the production configuration
+       and server-side payment approval/
+       completion before treating a purchase
+       as completed.
+    */
+
+
+    try{
+
+        window.Pi.createPayment(
+
+            {
+                amount:price,
+
+                memo:
+                    "RadyLingua - "+productName,
+
+                metadata:{
+                    product:productName,
+                    app:"RadyLingua",
+                    version:"1.0"
+                }
+
+            },
+
+            {
+
+                onReadyForServerApproval:
+                function(paymentId){
+
+                    console.log(
+                        "Payment ready for server approval:",
+                        paymentId
+                    );
+
+                    showToast(
+                        "تم إنشاء طلب الدفع. نحتاج الآن إلى خادم التحقق."
+                    );
+
+                },
+
+                onReadyForServerCompletion:
+                function(paymentId,txid){
+
+                    console.log(
+                        "Payment ready for completion:",
+                        paymentId,
+                        txid
+                    );
+
+                    showToast(
+                        "تم تنفيذ الدفع، بانتظار التحقق."
+                    );
+
+                },
+
+                onCancel:
+                function(paymentId){
+
+                    console.log(
+                        "Payment cancelled:",
+                        paymentId
+                    );
+
+                    showToast(
+                        "تم إلغاء عملية الدفع."
+                    );
+
+                },
+
+                onError:
+                function(error){
+
+                    console.log(
+                        "Payment error:",
+                        error
+                    );
+
+                    showToast(
+                        "حدث خطأ أثناء عملية الدفع."
+                    );
+
+                }
+
+            }
+
+        );
+
+    }catch(error){
+
+        console.log(
+            "Pi payment error:",
+            error
+        );
+
+        showToast(
+            "تعذر بدء الدفع حاليًا."
+        );
+
+    }
+
+}
+
+
+/* ---------------- Prevent accidental form issues ---------------- */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key==="Enter" &&
+            document.activeElement &&
+            document.activeElement.id==="messageInput"
+        ){
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+</script>
+
 </body>
 </html>
