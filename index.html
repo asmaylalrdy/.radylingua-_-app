@@ -2102,21 +2102,6 @@ button:disabled{
    CONFIGURATION
 ========================================================= */
 
-/*
-   مهم جدًا:
-
-   عندما ننشئ Backend حقيقي للذكاء الاصطناعي،
-   سنضع عنوان الـAPI هنا.
-
-   اتركه فارغًا الآن.
-
-   مثال لاحقًا:
-
-   const AI_API_URL =
-       "https://your-backend.example.com/api/chat";
-
-*/
-
 const AI_API_URL = "";
 
 
@@ -3878,22 +3863,6 @@ async function sendMessage(){
     input.value = "";
 
 
-    /*
-       -------------------------------------------------------
-       REAL AI BACKEND
-       -------------------------------------------------------
-
-       عندما يصبح AI_API_URL موجودًا،
-       سيُرسل التطبيق الرسالة إلى الـBackend.
-
-       إذا كان فارغًا الآن،
-       نستخدم الرد المحلي المؤقت.
-
-       هذا يحافظ على عمل التطبيق
-       إلى أن نبني الخادم الآمن.
-    */
-
-
     if(AI_API_URL){
 
         await sendToRealAI(
@@ -4028,7 +3997,7 @@ async function sendToRealAI(text){
 
 
 /* =========================================================
-   LOCAL AI FALLBACK
+   LOCAL AI FALLBACK (FIXED)
 ========================================================= */
 
 function generateLocalAIResponse(text){
@@ -4042,8 +4011,7 @@ function generateLocalAIResponse(text){
         lower.includes("hi")
     ){
 
-        return:
-            "Hello! 👋 Nice to meet you. How are you today?";
+        return "Hello! 👋 Nice to meet you. How are you today?";
 
     }
 
@@ -4052,8 +4020,7 @@ function generateLocalAIResponse(text){
         lower.includes("name")
     ){
 
-        return:
-            "Nice to meet you! You can say: My name is Ismail.";
+        return "Nice to meet you! You can say: My name is Ismail.";
 
     }
 
@@ -4062,8 +4029,7 @@ function generateLocalAIResponse(text){
         lower.includes("thank")
     ){
 
-        return:
-            "You're welcome! Keep practicing your English.";
+        return "You're welcome! Keep practicing your English.";
 
     }
 
@@ -4072,8 +4038,7 @@ function generateLocalAIResponse(text){
         lower.includes("how are you")
     ){
 
-        return:
-            "I'm doing great! Thank you for asking. How about you?";
+        return "I'm doing great! Thank you for asking. How about you?";
 
     }
 
@@ -4083,8 +4048,7 @@ function generateLocalAIResponse(text){
         lower.includes("learning")
     ){
 
-        return:
-            "Excellent! You can say: I am learning English every day.";
+        return "Excellent! You can say: I am learning English every day.";
 
     }
 
@@ -4093,14 +4057,12 @@ function generateLocalAIResponse(text){
         lower.includes("help")
     ){
 
-        return:
-            "Of course! Tell me what you would like to practice.";
+        return "Of course! Tell me what you would like to practice.";
 
     }
 
 
-    return:
-        "Great job! 👍 Keep practicing. Try saying the same idea in another English sentence.";
+    return "Great job! 👍 Keep practicing. Try saying the same idea in another English sentence.";
 
 }
 
