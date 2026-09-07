@@ -20,7 +20,7 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); }
 
-.screen { display: none; min-height: 100vh; padding-bottom: 80px; }
+.screen { display: none; min-height: 100vh; padding-bottom: 90px; }
 .screen.active { display: block; }
 
 /* LANDING SCREEN */
@@ -57,31 +57,47 @@ body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: var(--
 }
 .auth-btn.pi { background: #7c3aed; color: white; border: none; }
 
-/* TOPBAR & NAV */
-.topbar { background: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); sticky: top; top: 0; z-index: 10; }
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: white; border-top: 1px solid var(--border); display: none; grid-template-columns: repeat(5, 1fr); z-index: 20; }
+/* TOPBAR & NAVIGATION */
+.topbar { background: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: white; border-top: 1px solid var(--border); display: none; grid-template-columns: repeat(4, 1fr); z-index: 20; }
 .bottom-nav.active { display: grid; }
-.nav-btn { border: 0; background: none; color: var(--muted); font-size: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn { border: 0; background: none; color: var(--muted); font-size: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
 .nav-btn.active { color: var(--primary); font-weight: bold; }
 
-/* CONTENT & LESSONS */
+/* DASHBOARD COMPONENTS */
 .content { padding: 16px; max-width: 600px; margin: auto; }
+.card { background: white; border-radius: 18px; padding: 18px; margin-bottom: 14px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.gradient-card { background: linear-gradient(135deg, #f97316, #ef4444); color: white; border: none; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+.stat-box { background: white; border-radius: 14px; padding: 12px; text-align: center; border: 1px solid var(--border); }
+.stat-box strong { display: block; font-size: 18px; color: var(--text); }
+.stat-box span { font-size: 12px; color: var(--muted); }
+
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.action-btn { min-height: 85px; border-radius: 16px; border: none; font-size: 15px; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
+.action-btn.blue { background: #dbeafe; color: #1d4ed8; }
+.action-btn.green { background: #dcfce7; color: #15803d; }
+.action-btn.orange { background: #ffedd5; color: #c2410c; }
+.action-btn.purple { background: #f3e8ff; color: #7e22ce; }
+
+/* LESSONS */
 .lesson-card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
-.speak-btn { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 6px 12px; border-radius: 8px; font-size: 12px; }
+.speak-btn { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
 
 /* CHAT */
 .chat-box { display: flex; flex-direction: column; gap: 10px; }
 .msg { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 14px; }
 .msg.user { background: var(--primary); color: white; align-self: flex-end; }
 .msg.bot { background: white; border: 1px solid var(--border); align-self: flex-start; }
-.chat-input-bar { position: fixed; bottom: 65px; left: 0; right: 0; background: white; padding: 10px; display: none; gap: 8px; border-top: 1px solid var(--border); }
+.chat-input-bar { position: fixed; bottom: 65px; left: 0; right: 0; background: white; padding: 10px; display: none; gap: 8px; border-top: 1px solid var(--border); z-index: 30; }
 .chat-input-bar.active { display: flex; }
 .chat-input-bar input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); outline: none; }
 </style>
 </head>
 <body>
 
-<!-- LANDING -->
+<!-- LANDING / ONBOARDING -->
 <section id="welcomeScreen" class="screen active">
     <div class="welcome">
         <div class="logo">📖</div>
@@ -101,63 +117,103 @@ body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: var(--
     </div>
 </section>
 
-<!-- MAIN APP -->
+<!-- MAIN APP APP STRUCTURE -->
 <div id="mainApp" style="display:none;">
 
-    <!-- HOME -->
+    <!-- HOME DASHBOARD -->
     <section id="homeScreen" class="screen">
-        <header class="topbar"><strong>الرئيسية</strong><span>π 0.00</span></header>
+        <header class="topbar">
+            <strong>الرئيسية</strong>
+            <span style="background:#fff7c2; padding:6px 12px; border-radius:10px; font-weight:bold;">π 0.00</span>
+        </header>
+
         <main class="content">
-            <h3>مرحباً بك مجدداً 👋</h3>
-            <p style="color:var(--muted)">اختر خياراً للبدء بالتعلم اليوم.</p>
+            <div style="margin-bottom:15px;">
+                <h3 style="margin:0 0 5px 0;">مرحباً بك مجدداً 👋</h3>
+                <span style="color:var(--muted); font-size:14px;">واصل رحلة تعلم الإنجليزية اليوم.</span>
+            </div>
+
+            <!-- LEVEL & PROGRESS CARD -->
+            <div class="card gradient-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:13px; opacity:0.9;">المستوى الحلي</div>
+                        <div id="levelVal" style="font-size:30px; font-weight:bold;">1</div>
+                    </div>
+                    <div style="font-size:36px;">🔥</div>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.3); border-radius:10px; margin:12px 0 6px 0;">
+                    <div id="progressFill" style="height:100%; width:20%; background:white; border-radius:10px;"></div>
+                </div>
+                <small style="font-size:11px; opacity:0.9;">أكمل الدروس لرفع إحصائياتك!</small>
+            </div>
+
+            <!-- STATS COUNTERS -->
+            <div class="stats-grid">
+                <div class="stat-box"><strong id="xpVal">0</strong><span>XP</span></div>
+                <div class="stat-box"><strong id="daysVal">1</strong><span>أيام</span></div>
+                <div class="stat-box"><strong id="lessonsCount">0</strong><span>دروس</span></div>
+            </div>
+
+            <!-- DASHBOARD ACTIONS -->
+            <div class="action-grid">
+                <button class="action-btn blue" onclick="openScreen('lessonsScreen')">📚<br>الدروس</button>
+                <button class="action-btn green" onclick="openScreen('chatScreen')">💬<br>AI Chat</button>
+                <button class="action-btn orange" onclick="openScreen('lessonsScreen')">🏆<br>إنجازاتي</button>
+                <button class="action-btn purple" onclick="openScreen('settingsScreen')">⚙️<br>الإعدادات</button>
+            </div>
         </main>
     </section>
 
-    <!-- LESSONS -->
+    <!-- LESSONS SCREEN -->
     <section id="lessonsScreen" class="screen">
         <header class="topbar"><strong>📚 قائمة الدروس</strong></header>
         <main class="content" id="lessonsContainer"></main>
     </section>
 
-    <!-- CHAT AI -->
+    <!-- AI CHAT SCREEN -->
     <section id="chatScreen" class="screen">
         <header class="topbar"><strong>💬 المساعد الذكي (Gemini)</strong></header>
         <main class="content">
             <div id="chatMessages" class="chat-box">
-                <div class="msg bot">Hello! I am your AI language tutor. How can I help you today?</div>
+                <div class="msg bot">Hello! I am your AI language tutor. How can I help you practice today?</div>
             </div>
         </main>
     </section>
 
-    <!-- SETTINGS -->
+    <!-- SETTINGS SCREEN -->
     <section id="settingsScreen" class="screen">
         <header class="topbar"><strong>⚙️ الإعدادات والمطور</strong></header>
         <main class="content">
-            <div style="background:white; padding:15px; border-radius:12px; border:1px solid var(--border);">
-                <h4>👨‍💻 بيانات المطور</h4>
-                <p>Ismail Ahmed Ismail<br>إسماعيل أحمد إسماعيل</p>
-                <p>البريد: asmaylalrdy744@gmail.com</p>
+            <div class="card">
+                <h4 style="margin-top:0;">👨‍💻 بيانات المطور</h4>
+                <p style="margin:5px 0;"><strong>Ismail Ahmed Ismail</strong><br>إسماعيل أحمد إسماعيل</p>
+                <p style="margin:5px 0; color:var(--muted); font-size:14px;">asmaylalrdy744@gmail.com</p>
+            </div>
+            <div class="card">
+                <h4 style="margin-top:0;">🔒 سياسة الخصوصية</h4>
+                <p style="margin:0; color:var(--muted); font-size:13px; line-height:1.6;">جميع البيانات المحفوظة والتقدم الشخصي يتم تخزينها داخل متصفحك محلياً لضمان سرعة واستقرار التجربة.</p>
             </div>
         </main>
     </section>
 
-    <!-- BOTTOM NAV -->
+    <!-- BOTTOM NAVIGATION -->
     <nav id="bottomNav" class="bottom-nav">
-        <button class="nav-btn" onclick="openScreen('homeScreen')">🏠<br>الرئيسية</button>
-        <button class="nav-btn" onclick="openScreen('lessonsScreen')">📚<br>الدروس</button>
-        <button class="nav-btn" onclick="openScreen('chatScreen')">💬<br>الدردشة</button>
-        <button class="nav-btn" onclick="openScreen('settingsScreen')">⚙️<br>الإعدادات</button>
+        <button class="nav-btn active" id="btn-homeScreen" onclick="openScreen('homeScreen')">🏠<br>الرئيسية</button>
+        <button class="nav-btn" id="btn-lessonsScreen" onclick="openScreen('lessonsScreen')">📚<br>الدروس</button>
+        <button class="nav-btn" id="btn-chatScreen" onclick="openScreen('chatScreen')">💬<br>الدردشة</button>
+        <button class="nav-btn" id="btn-settingsScreen" onclick="openScreen('settingsScreen')">⚙️<br>الإعدادات</button>
     </nav>
 
     <!-- CHAT BAR -->
     <div id="chatInputBar" class="chat-input-bar">
         <input id="chatInput" type="text" placeholder="اكتب بالإنجليزية...">
-        <button onclick="sendGeminiMessage()" style="background:var(--primary); color:white; border:none; padding:0 15px; border-radius:8px;">إرسال</button>
+        <button onclick="sendGeminiMessage()" style="background:var(--primary); color:white; border:none; padding:0 15px; border-radius:8px; font-weight:bold;">إرسال</button>
     </div>
 </div>
 
 <script>
-const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; // ضع مفتاح Gemini هنا
+const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
 
 const lessonsData = [
     { id: 1, title: "التحيات الأساسية", words: [{ en: "Hello", ar: "مرحباً" }, { en: "Good morning", ar: "صباح الخير" }] },
@@ -180,22 +236,31 @@ function login(provider) {
 function openScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+    
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const activeNav = document.getElementById('btn-' + id);
+    if(activeNav) activeNav.classList.add('active');
+
     document.getElementById('chatInputBar').classList.toggle('active', id === 'chatScreen');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function renderLessons() {
     const container = document.getElementById("lessonsContainer");
+    if(!container) return;
     container.innerHTML = "";
     lessonsData.forEach(l => {
         let wordsHTML = l.words.map(w => `
-            <p><strong>${w.en}</strong> - ${w.ar} 
+            <p style="margin:8px 0;"><strong>${w.en}</strong> - ${w.ar} 
             <button class="speak-btn" onclick="speak('${w.en}')">🔊 نطق</button></p>
         `).join('');
-        container.innerHTML += `<div class="lesson-card"><h3>${l.title}</h3>${wordsHTML}</div>`;
+        container.innerHTML += `<div class="lesson-card"><h3 style="margin-top:0; color:var(--primary);">${l.title}</h3>${wordsHTML}</div>`;
     });
 }
 
 function speak(text) {
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'en-US';
     window.speechSynthesis.speak(u);
@@ -213,7 +278,7 @@ async function sendGeminiMessage() {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: "You are an English tutor for an app called RadyLingua. Reply to this: " + text }] }] })
+            body: JSON.stringify({ contents: [{ parts: [{ text: "You are an English language tutor on RadyLingua app. Keep replies concise and encouraging: " + text }] }] })
         });
         const data = await res.json();
         const reply = data.candidates[0].content.parts[0].text;
@@ -230,4 +295,4 @@ function appendMsg(text, type) {
 }
 </script>
 </body>
-</html>
+</html>سب٣ثي
