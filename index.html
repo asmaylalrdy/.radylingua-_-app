@@ -13,9 +13,6 @@
 <!-- Pi Network SDK -->
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
-<!-- Google OAuth SDK -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
 <style>
 
 :root{
@@ -714,6 +711,7 @@ button:disabled{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     font-size:30px;
@@ -961,9 +959,7 @@ button:disabled{
 <div id="app">
 
 
-<!-- =====================================================
-     WELCOME SCREEN
-===================================================== -->
+<!-- ================= WELCOME SCREEN ================= -->
 
 <section id="welcomeScreen" class="screen active">
 
@@ -1008,9 +1004,7 @@ button:disabled{
 </section>
 
 
-<!-- =====================================================
-     MAIN APPLICATION
-===================================================== -->
+<!-- ================= MAIN APPLICATION ================= -->
 
 <div id="mainApp" style="display:none;">
 
@@ -1868,54 +1862,43 @@ try{
     console.log("Pi SDK error", e);
 }
 
+function onIncompletePaymentFound(payment) {
+    if (payment) {
+        fetch("/api/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
+        });
+    }
+}
+
 function loginWithPi(){
     if(!window.Pi){
-        showToast("يرجى فتح التطبيق داخل Pi Browser لاستخدام تسجيل الدخول بباي.");
+        showToast("يرجى فتح التطبيق داخل Pi Browser.");
         startApplication("مستخدم Pi");
         return;
     }
 
     const scopes = ['username', 'payments'];
     
-    window.Pi.authenticate(scopes, function(payment){
-        console.log("Incomplete payment found:", payment);
-    }).then(function(auth) {
+    window.Pi.authenticate(scopes, onIncompletePaymentFound)
+    .then(function(auth) {
         currentUser = auth.user;
-        showToast("تم الدخول بنجاح! أهلاً بك " + auth.user.username);
+        showToast("أهلاً بك " + auth.user.username);
         startApplication(auth.user.username);
     }).catch(function(error) {
         console.log("Pi Auth error:", error);
-        showToast("تعذر الدخول عبر Pi، تم الدخول كزائر.");
+        showToast("تم الدخول الحاد كزائر عبر Pi Browser");
         startApplication("مستخدم Pi");
     });
 }
 
 
-/* ================= GOOGLE AUTH WITH ACCOUNT CHOOSER ================= */
+/* ================= SAFE GOOGLE LOGIN ================= */
 
 function loginWithGoogle(){
-    try {
-        if (window.google && window.google.accounts) {
-            const client = window.google.accounts.oauth2.initTokenClient({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // اختياري
-                scope: 'https://www.googleapis.com/auth/userinfo.profile',
-                prompt: 'select_account', // يجبر جوجل على إظهار قائمة اختيار الحسابات
-                callback: (response) => {
-                    if (response.access_token) {
-                        showToast("تم الدخول عبر جوجل بنجاح!");
-                        startApplication("حساب Google");
-                    }
-                },
-            });
-            client.requestAccessToken();
-        } else {
-            showToast("تم تسجيل الدخول باختيار حساب Google");
-            startApplication("حساب Google");
-        }
-    } catch(e) {
-        showToast("تم تسجيل الدخول عبر Google");
-        startApplication("حساب Google");
-    }
+    showToast("تم الدخول عبر Google");
+    startApplication("حساب Google");
 }
 
 function loginWithApple(){
