@@ -104,7 +104,7 @@ button:disabled{
 
     box-shadow:0 15px 35px rgba(37,99,235,.25);
 
-    margin-bottom:25px;
+    margin-bottom:20px;
 }
 
 .welcome h1{
@@ -116,6 +116,81 @@ button:disabled{
     color:var(--muted);
     line-height:1.8;
     max-width:350px;
+    margin-bottom:15px;
+}
+
+/* LANGUAGE TOGGLE STYLES */
+.lang-toggle-box {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 20px;
+}
+
+.lang-btn-option {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-btn-option.ar {
+    background: #dcfce7;
+    color: #15803d;
+    border-color: #86efac;
+}
+
+.lang-btn-option.en {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-color: #93c5fd;
+}
+
+.lang-btn-option.selected {
+    transform: scale(1.04);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-width: 3px;
+}
+
+/* AUTH BUTTONS */
+.auth-box {
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-btn-item {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.auth-btn-item.pi {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    color: white;
+    border: none;
+    box-shadow: 0 6px 18px rgba(124,58,237,0.3);
 }
 
 .primary-btn{
@@ -134,7 +209,7 @@ button:disabled{
     width:100%;
     max-width:350px;
 
-    margin-top:20px;
+    margin-top:10px;
 
     box-shadow:0 8px 20px rgba(37,99,235,.2);
 }
@@ -959,21 +1034,30 @@ button:disabled{
             تعلم الإنجليزية بطريقة ذكية،
             بسيطة وممتعة.
 
-            <br><br>
-
-            دروس متجددة،
-            تحديات يومية،
-            وممارسة محادثة تفاعلية.
-
         </p>
 
-        <button
-            class="primary-btn"
-            onclick="showLanguage()">
+        <!-- اختيار اللغة بلونين أصلية ومميزة -->
+        <div class="lang-toggle-box">
+            <button id="welcomeLangAr" class="lang-btn-option ar selected" onclick="selectLanguageFromLanding('ar')">
+                <span class="flag">🇸🇩</span> العربية
+            </button>
+            <button id="welcomeLangEn" class="lang-btn-option en" onclick="selectLanguageFromLanding('en')">
+                <span class="flag">🇺🇸</span> English
+            </button>
+        </div>
 
-            ابدأ الآن
-
-        </button>
+        <!-- خيارات دخول خفيفة ومباشرة -->
+        <div class="auth-box">
+            <button class="auth-btn-item pi" onclick="loginProvider('Pi Network')">
+                ⚡ Sign-in with Pi Network
+            </button>
+            <button class="auth-btn-item" onclick="loginProvider('Google')">
+                🌐 الدخول باستخدام Google
+            </button>
+            <button class="auth-btn-item" onclick="loginProvider('Apple')">
+                🍎 الدخول باستخدام Apple
+            </button>
+        </div>
 
     </div>
 
@@ -1837,7 +1921,7 @@ button:disabled{
 <header class="topbar">
 
     <strong>
-        ⚙️ الإعدادات
+        ⚙️ الإعدادات والمعلومات
     </strong>
 
 </header>
@@ -1864,6 +1948,35 @@ button:disabled{
 
 </div>
 
+<div class="setting">
+
+    <strong>
+        ℹ️ نبذة عن RadyLingua
+    </strong>
+
+    <p class="muted" style="margin-top:8px; line-height:1.6;">
+
+        <strong>RadyLingua (رضي لينجوا)</strong> تطبيق تعليمي تفاعلي ذكي يساعد الناطقين باللغة العربية على تعلّم وممارسة اللغة الإنجليزية بسلاسة عبر الذكاء الاصطناعي وتقنيات تطبيقات Pi Network.
+
+    </p>
+
+</div>
+
+<div class="setting">
+
+    <strong>
+        👨‍💻 معلومات المطور والتواصل
+    </strong>
+
+    <p class="muted" style="margin-top:8px; line-height:1.6;">
+
+        <strong>تطوير:</strong> Ismail Ahmed Ismail (إسماعيل أحمد إسماعيل)<br>
+        <strong>البريد الإلكتروني:</strong> asmaylalrdy744@gmail.com
+
+    </p>
+
+</div>
+
 
 <div class="setting">
 
@@ -1871,10 +1984,9 @@ button:disabled{
         🔒 سياسة الخصوصية
     </strong>
 
-    <p class="muted">
+    <p class="muted" style="margin-top:8px; line-height:1.6;">
 
-        RadyLingua يحترم خصوصية المستخدم
-        ولا يطلب بيانات غير ضرورية.
+        RadyLingua يحترم خصوصية المستخدم ولا يطلب بيانات غير ضرورية. يتم حفظ تقدمك وإحصائيات التعلم محلياً على جهازك لتوفير السرعة وسهولة الاستخدام.
 
     </p>
 
@@ -1887,26 +1999,9 @@ button:disabled{
         📄 شروط الاستخدام
     </strong>
 
-    <p class="muted">
+    <p class="muted" style="margin-top:8px; line-height:1.6;">
 
-        استخدام التطبيق يعني الموافقة
-        على شروط RadyLingua.
-
-    </p>
-
-</div>
-
-
-<div class="setting">
-
-    <strong>
-        ℹ️ حول RadyLingua
-    </strong>
-
-    <p class="muted">
-
-        تطبيق تعليمي ذكي لتعلم اللغات
-        بطريقة بسيطة وتفاعلية.
+        استخدام التطبيق يعني الموافقة على شروط RadyLingua والاستفادة من المحتوى المتاح لأغراض التعلم الشخصي.
 
     </p>
 
@@ -2738,6 +2833,20 @@ function showLanguage(){
 
 }
 
+function selectLanguageFromLanding(language){
+    const arBtn = document.getElementById("welcomeLangAr");
+    const enBtn = document.getElementById("welcomeLangEn");
+    if(arBtn && enBtn){
+        arBtn.classList.toggle("selected", language === 'ar');
+        enBtn.classList.toggle("selected", language === 'en');
+    }
+    selectLanguage(language);
+}
+
+function loginProvider(provider){
+    showToast("جاري الدخول عبر " + provider);
+    startApplication();
+}
 
 function selectLanguage(language){
 
