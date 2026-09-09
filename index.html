@@ -103,7 +103,6 @@ button:disabled{
     margin-bottom:20px;
 }
 
-/* LANGUAGE SELECTOR IN LANDING */
 .lang-toggle-box {
     display: flex;
     gap: 12px;
@@ -145,7 +144,6 @@ button:disabled{
     border-width: 3px;
 }
 
-/* AUTH BUTTONS */
 .auth-box {
     width: 100%;
     max-width: 320px;
@@ -498,10 +496,10 @@ button:disabled{
 
         <!-- Language Switcher -->
         <div class="lang-toggle-box">
-            <button id="btn-ar" class="lang-btn-select ar selected" onclick="setAppLanguage('ar')">
+            <button id="btn-lang-ar" class="lang-btn-select ar selected" onclick="setAppLanguage('ar')">
                 <span>🇸🇩</span> العربية
             </button>
-            <button id="btn-en" class="lang-btn-select en" onclick="setAppLanguage('en')">
+            <button id="btn-lang-en" class="lang-btn-select en" onclick="setAppLanguage('en')">
                 <span>🇺🇸</span> English
             </button>
         </div>
@@ -634,7 +632,7 @@ button:disabled{
         <div class="product">
             <h3>دليل المحادثة التفاعلي</h3>
             <p class="muted">كتاب تعليمي مع تدريبات للمحادثة اليومية.</p>
-            <div style="display:flex; justify-style:space-between; align-items:center; margin-top:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
                 <span class="pi-price">10 π</span>
                 <button class="buy-btn" onclick="buyPiProduct('دليل المحادثة', 10)">اشترِ بـ π</button>
             </div>
@@ -705,7 +703,17 @@ button:disabled{
 <script>
 /* CORE DATA & STATE */
 let selectedLang = 'ar';
-let appData = JSON.parse(localStorage.getItem("rady_app_data") || '{"xp":1250,"completedLessons":[1,2,3],"streak":7}');
+let appData = { xp: 1250, completedLessons: [1, 2, 3], streak: 7 };
+
+try {
+    const saved = localStorage.getItem("rady_app_data");
+    if (saved) {
+        appData = JSON.parse(saved);
+        if(!Array.isArray(appData.completedLessons)) appData.completedLessons = [1, 2, 3];
+    }
+} catch(e) {
+    console.log("Local Storage parse error, using default data");
+}
 
 const lessonDatabase = [
     { id:1, title:"التحيات الأساسية", level:"مبتدئ", duration:"5:30", xp:50, words:[{english:"Hello", arabic:"مرحبًا"}, {english:"Good morning", arabic:"صباح الخير"}] },
@@ -721,8 +729,10 @@ window.addEventListener("load", function(){
 
 function setAppLanguage(lang){
     selectedLang = lang;
-    document.getElementById("btn-ar").classList.toggle("selected", lang === 'ar');
-    document.getElementById("btn-en").classList.toggle("selected", lang === 'en');
+    const btnAr = document.getElementById("btn-lang-ar");
+    const btnEn = document.getElementById("btn-lang-en");
+    if(btnAr) btnAr.classList.toggle("selected", lang === 'ar');
+    if(btnEn) btnEn.classList.toggle("selected", lang === 'en');
 }
 
 function loginUser(provider){
@@ -747,6 +757,10 @@ function openScreen(id){
         chatBar.classList.toggle("active", id === 'chatScreen');
     }
 
+    if(id === 'lessonsScreen') {
+        renderLessons();
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -756,7 +770,7 @@ function renderLessons(){
     container.innerHTML = "";
 
     lessonDatabase.forEach(lesson => {
-        const isDone = appData.completedLessons.includes(lesson.id);
+        const isDone = appData.completedLessons && appData.completedLessons.includes(lesson.id);
         const el = document.createElement("div");
         el.className = "lesson";
 
@@ -802,8 +816,10 @@ function completeLesson(id, xp, btn){
 }
 
 function updateUI(){
-    document.getElementById("xpValue").textContent = appData.xp;
-    document.getElementById("lessonCount").textContent = appData.completedLessons.length;
+    const xpEl = document.getElementById("xpValue");
+    const countEl = document.getElementById("lessonCount");
+    if(xpEl) xpEl.textContent = appData.xp;
+    if(countEl) countEl.textContent = appData.completedLessons.length;
     if(document.getElementById("achieveXP")) document.getElementById("achieveXP").textContent = appData.xp;
     if(document.getElementById("achieveLessons")) document.getElementById("achieveLessons").textContent = appData.completedLessons.length;
 }
@@ -830,7 +846,6 @@ async function sendGeminiChat(){
     input.value = "";
 
     try {
-        // يتم استدعاء المفتاح تلقائياً عبر Vercel Environment Variables
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -847,6 +862,7 @@ async function sendGeminiChat(){
 
 function appendMsg(text, type){
     const box = document.getElementById("chatMessages");
+    if(!box) return;
     const el = document.createElement("div");
     el.className = "message " + type;
     el.textContent = text;
@@ -874,6 +890,7 @@ function buyPiProduct(name, price){
 
 function showToast(msg){
     const t = document.getElementById("toast");
+    if(!t) return;
     t.textContent = msg;
     t.classList.add("show");
     setTimeout(() => t.classList.remove("show"), 2500);
