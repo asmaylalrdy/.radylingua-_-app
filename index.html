@@ -785,7 +785,7 @@ button:disabled{
 
     display:none;
 
-    grid-template-columns:repeat(6,1fr);
+    grid-template-columns:repeat(5,1fr);
 
     z-index:50;
 
@@ -803,7 +803,7 @@ button:disabled{
 
     color:#6b7280;
 
-    font-size:10px;
+    font-size:11px;
 
     display:flex;
 
@@ -1133,7 +1133,7 @@ button:disabled{
                 id="levelValue"
                 style="font-size:34px;font-weight:bold;">
 
-                1
+                3
 
             </div>
 
@@ -1160,7 +1160,7 @@ button:disabled{
         <div
             id="levelProgress"
             class="progress-fill"
-            style="width:10%;background:white;">
+            style="width:65%;background:white;">
 
         </div>
 
@@ -1180,7 +1180,7 @@ button:disabled{
     <div class="stat">
 
         <strong id="xpValue">
-            0
+            1250
         </strong>
 
         <span>
@@ -1204,7 +1204,7 @@ button:disabled{
     <div class="stat">
 
         <strong id="lessonCount">
-            0
+            3
         </strong>
 
         <span>
@@ -1412,7 +1412,7 @@ button:disabled{
             <div
                 id="courseProgress"
                 class="progress-fill"
-                style="width:0%;">
+                style="width:75%;">
 
             </div>
 
@@ -1422,7 +1422,7 @@ button:disabled{
             id="courseProgressText"
             class="muted">
 
-            0% مكتمل
+            75% مكتمل
 
         </span>
 
@@ -1563,7 +1563,7 @@ button:disabled{
         <div class="stat">
 
             <strong id="achievementXP">
-                0
+                1250
             </strong>
 
             <span>
@@ -1587,7 +1587,7 @@ button:disabled{
         <div class="stat">
 
             <strong id="completedLessons">
-                0
+                3
             </strong>
 
             <span>
@@ -1851,7 +1851,7 @@ button:disabled{
         </strong>
 
         <button
-            onclick="showWelcome()">
+            onclick="changeLanguage()">
 
             تغيير
 
@@ -2018,19 +2018,6 @@ button:disabled{
     </span>
 
     المتجر
-
-</button>
-
-<button
-    class="nav-btn"
-    data-screen="settingsScreen"
-    onclick="openScreen('settingsScreen')">
-
-    <span class="icon">
-        ⚙️
-    </span>
-
-    الإعدادات
 
 </button>
 
@@ -2217,16 +2204,18 @@ button:disabled{
    USER DATA
 ========================================================= */
 
-let currentLanguage = "ar";
+let currentLanguage =
+    localStorage.getItem("rady_language") || null;
 
 let appData = JSON.parse(
     localStorage.getItem("rady_app_data") || "{}"
 );
 
-if(appData.xp === undefined) appData.xp = 0;
-if(appData.completedLessons === undefined) appData.completedLessons = 0;
-if(appData.streak === undefined) appData.streak = 7;
-if(appData.level === undefined) appData.level = 1;
+if(!appData.xp) appData.xp = 1250;
+if(!appData.completedLessons) appData.completedLessons = 3;
+if(!appData.streak) appData.streak = 7;
+if(!appData.level) appData.level = 3;
+if(!appData.lastChallenge) appData.lastChallenge = "";
 if(!appData.challengeCompleted) appData.challengeCompleted = {};
 
 function saveAppData(){
@@ -2241,18 +2230,23 @@ function saveAppData(){
    PI SDK
 ========================================================= */
 
+let piInitialized = false;
+
 try{
     if(window.Pi){
         window.Pi.init({
             version:"2.0",
             sandbox:true
         });
+        piInitialized = true;
     }
-}catch(e){}
+}catch(error){
+    console.log("Pi SDK error:", error);
+}
 
 
 /* =========================================================
-   LESSON DATABASE
+   LESSONS DATABASE (FULL 8 LESSONS)
 ========================================================= */
 
 const lessonDatabase = [
@@ -2389,6 +2383,7 @@ const lessonDatabase = [
 
 
 const dailyContent = [
+
 {
     word:"improve",
     arabic:"يتحسن / يطوّر",
@@ -2396,13 +2391,36 @@ const dailyContent = [
     challenge:"I practice English every morning.",
     answer:[
         "أنا أمارس الإنجليزية كل صباح",
-        "امارس الإنجليزية كل صباح"
+        "امارس الإنجليزية كل صباح",
+        "أنا أتمرن على الإنجليزية كل صباح"
+    ]
+},
+
+{
+    word:"learn",
+    arabic:"يتعلم",
+    example:"I learn something new every day.",
+    challenge:"I learn something new every day.",
+    answer:[
+        "أنا أتعلم شيئًا جديدًا كل يوم",
+        "اتعلم شيئا جديدا كل يوم"
     ]
 }
+
 ];
 
+
+function getDayIndex(){
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+    return Math.floor(diff / oneDay);
+}
+
 function getDailyContent(){
-    return dailyContent[0];
+    const index = getDayIndex() % dailyContent.length;
+    return dailyContent[index];
 }
 
 
@@ -2411,23 +2429,57 @@ function getDailyContent(){
 ========================================================= */
 
 window.addEventListener("load", function(){
-    showWelcome();
+    updateAllUI();
+    if(currentLanguage){
+        startApplication();
+    }else{
+        showWelcome();
+    }
 });
 
 function hideAllScreens(){
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+}
+
+function openScreen(id){
+    hideAllScreens();
+    const screen = document.getElementById(id);
+    if(screen){
+        screen.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.remove("active");
+        if(btn.dataset.screen === id){
+            btn.classList.add("active");
+        }
+    });
+
+    const chatInput = document.getElementById("chatInput");
+    if(chatInput){
+        if(id === "chatScreen"){
+            chatInput.classList.add("active");
+        }else{
+            chatInput.classList.remove("active");
+        }
+    }
+
+    if(id === "lessonsScreen"){
+        renderLessons();
+    }
+
+    window.scrollTo({ top:0, behavior:"smooth" });
 }
 
 function showWelcome(){
     hideAllScreens();
-    document.getElementById("mainApp").style.display = "none";
-    document.getElementById("bottomNav").classList.remove("active");
     document.getElementById("welcomeScreen").classList.add("active");
 }
 
-function selectLanguageFromLanding(lang){
-    currentLanguage = lang;
-    startApplication();
+function selectLanguageFromLanding(language){
+    selectLanguage(language);
 }
 
 function loginProvider(provider){
@@ -2435,8 +2487,21 @@ function loginProvider(provider){
     startApplication();
 }
 
+function selectLanguage(language){
+    currentLanguage = language;
+    localStorage.setItem("rady_language", language);
+    startApplication();
+}
+
+function changeLanguage(){
+    localStorage.removeItem("rady_language");
+    currentLanguage = null;
+    document.getElementById("mainApp").style.display = "none";
+    document.getElementById("bottomNav").classList.remove("active");
+    showWelcome();
+}
+
 function startApplication(){
-    hideAllScreens();
     document.getElementById("welcomeScreen").classList.remove("active");
     document.getElementById("mainApp").style.display = "block";
     document.getElementById("bottomNav").classList.add("active");
@@ -2444,50 +2509,52 @@ function startApplication(){
     openScreen("homeScreen");
 }
 
-function openScreen(id){
-    hideAllScreens();
-    const screen = document.getElementById(id);
-    if(screen) screen.classList.add("active");
-
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.classList.remove("active");
-        if(btn.dataset.screen === id) btn.classList.add("active");
-    });
-
-    const chatInput = document.getElementById("chatInput");
-    if(chatInput){
-        if(id === "chatScreen") chatInput.classList.add("active");
-        else chatInput.classList.remove("active");
-    }
-
-    if(id === "lessonsScreen") renderLessons();
-    window.scrollTo({ top:0, behavior:"smooth" });
-}
-
 
 /* =========================================================
-   UI & PROGRESS UPDATES
+   UPDATE ALL UI
 ========================================================= */
 
 function updateAllUI(){
     const daily = getDailyContent();
     const xp = Number(appData.xp || 0);
     const lessons = Number(appData.completedLessons || 0);
-    const streak = Number(appData.streak || 7);
+    const streak = Number(appData.streak || 0);
 
-    document.getElementById("xpValue").textContent = xp;
-    document.getElementById("achievementXP").textContent = xp;
+    const xpElements = ["xpValue", "achievementXP"];
+    xpElements.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = xp;
+    });
 
-    document.getElementById("lessonCount").textContent = lessons;
-    document.getElementById("completedLessons").textContent = lessons;
+    const lessonElements = ["lessonCount", "completedLessons"];
+    lessonElements.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = lessons;
+    });
 
-    document.getElementById("daysValue").textContent = streak;
-    document.getElementById("achievementDays").textContent = streak;
+    const days = document.getElementById("daysValue");
+    if(days) days.textContent = streak;
 
-    document.getElementById("dailyWordEnglish").textContent = daily.word;
-    document.getElementById("dailyWordArabic").textContent = daily.arabic;
-    document.getElementById("dailyExample").textContent = daily.example;
-    document.getElementById("dailyChallengeSentence").textContent = daily.challenge;
+    const achievementDays = document.getElementById("achievementDays");
+    if(achievementDays) achievementDays.textContent = streak;
+
+    const streakText = document.getElementById("streakText");
+    if(streakText) streakText.textContent = streak + " أيام متتالية";
+
+    const word = document.getElementById("dailyWordEnglish");
+    if(word) word.textContent = daily.word;
+
+    const arabic = document.getElementById("dailyWordArabic");
+    if(arabic) arabic.textContent = daily.arabic;
+
+    const example = document.getElementById("dailyExample");
+    if(example) example.textContent = daily.example;
+
+    const challenge = document.getElementById("dailyChallengeSentence");
+    if(challenge) challenge.textContent = daily.challenge;
+
+    const question = document.getElementById("challengeQuestion");
+    if(question) question.textContent = daily.challenge;
 
     updateLevel();
     renderDailyLesson();
@@ -2499,14 +2566,57 @@ function updateLevel(){
     appData.level = level;
     saveAppData();
 
-    document.getElementById("levelValue").textContent = level;
+    const levelElement = document.getElementById("levelValue");
+    if(levelElement) levelElement.textContent = level;
+
     const progress = ((xp % 400) / 400) * 100;
-    document.getElementById("levelProgress").style.width = Math.max(10, progress) + "%";
+    const progressElement = document.getElementById("levelProgress");
+    if(progressElement){
+        progressElement.style.width = Math.max(8, progress) + "%";
+    }
 }
 
 
 /* =========================================================
-   LESSONS MANAGEMENT
+   DAILY LESSON
+========================================================= */
+
+function getDailyLesson(){
+    const index = getDayIndex() % lessonDatabase.length;
+    return lessonDatabase[index];
+}
+
+function renderDailyLesson(){
+    const container = document.getElementById("dailyLessonHome");
+    if(!container) return;
+
+    const lesson = getDailyLesson();
+    const completed = isLessonCompleted(lesson.id);
+
+    container.innerHTML = `
+        <div class="lesson">
+            <div class="row">
+                <div class="lesson-number">${lesson.id}</div>
+                <div style="flex:1;">
+                    <h3>${lesson.title}</h3>
+                    <div class="lesson-meta">
+                        ${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP
+                    </div>
+                </div>
+            </div>
+            <div class="progress">
+                <div class="progress-fill" style="width:${completed ? 100 : 0}%;"></div>
+            </div>
+            <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
+                ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
+            </button>
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   LESSON COMPLETION & RENDER LESSONS
 ========================================================= */
 
 function getCompletedLessonIds(){
@@ -2519,74 +2629,8 @@ function isLessonCompleted(id){
     return getCompletedLessonIds().includes(id);
 }
 
-function renderDailyLesson(){
-    const container = document.getElementById("dailyLessonHome");
-    if(!container) return;
-
-    const lesson = lessonDatabase[0];
-    const completed = isLessonCompleted(lesson.id);
-
-    container.innerHTML = `
-        <div class="lesson">
-            <div class="row">
-                <div class="lesson-number">${lesson.id}</div>
-                <div style="flex:1;">
-                    <h3>${lesson.title}</h3>
-                    <div class="lesson-meta">${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP</div>
-                </div>
-            </div>
-            <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
-                ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
-            </button>
-        </div>
-    `;
-}
-
-function renderLessons(){
-    const container = document.getElementById("lessonsContainer");
-    if(!container) return;
-
-    container.innerHTML = "";
-    const completedIds = getCompletedLessonIds();
-
-    lessonDatabase.forEach(lesson => {
-        const completed = completedIds.includes(lesson.id);
-        const element = document.createElement("div");
-        element.className = "lesson";
-
-        let wordsHTML = "";
-        lesson.words.forEach(w => {
-            wordsHTML += `<p><strong>${w.english}</strong> — ${w.arabic} <button class="speak-btn" onclick="speakText('${escapeJS(w.english)}')">🔊 نطق</button></p>`;
-        });
-
-        let examplesHTML = "";
-        lesson.examples.forEach(ex => {
-            examplesHTML += `<div class="example-box">${ex} <br><button class="speak-btn" onclick="speakText('${escapeJS(ex)}')">🔊 استماع</button></div>`;
-        });
-
-        element.innerHTML = `
-            <div class="row">
-                <div class="lesson-number">${lesson.id}</div>
-                <div style="flex:1;">
-                    <h3>${lesson.title}</h3>
-                    <div class="lesson-meta">${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP</div>
-                </div>
-            </div>
-            <hr>${wordsHTML}${examplesHTML}
-            <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
-                ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
-            </button>
-        `;
-        container.appendChild(element);
-    });
-
-    const percentage = Math.min(100, Math.round((completedIds.length / lessonDatabase.length) * 100));
-    document.getElementById("courseProgress").style.width = percentage + "%";
-    document.getElementById("courseProgressText").textContent = percentage + "% مكتمل";
-}
-
 function completeLessonById(lessonId, button){
-    let completed = getCompletedLessonIds();
+    const completed = getCompletedLessonIds();
     if(completed.includes(lessonId)){
         showToast("هذا الدرس مكتمل بالفعل ✅");
         return;
@@ -2612,26 +2656,101 @@ function completeLessonById(lessonId, button){
     showToast("أحسنت! حصلت على " + reward + " XP 🎉");
 }
 
+function renderLessons(){
+    const container = document.getElementById("lessonsContainer");
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    lessonDatabase.forEach(lesson => {
+        const completed = isLessonCompleted(lesson.id);
+        const element = document.createElement("div");
+        element.className = "lesson";
+
+        let wordsHTML = "";
+        lesson.words.forEach(word => {
+            wordsHTML += `
+                <p>
+                    <strong>${word.english}</strong> — ${word.arabic}
+                    <button class="speak-btn" onclick="speak('${escapeJS(word.english)}')">
+                        🔊 نطق
+                    </button>
+                </p>
+            `;
+        });
+
+        let examplesHTML = "";
+        lesson.examples.forEach(example => {
+            examplesHTML += `
+                <div class="example-box">
+                    ${example}<br>
+                    <button class="speak-btn" onclick="speak('${escapeJS(example)}')">
+                        🔊 استماع
+                    </button>
+                </div>
+            `;
+        });
+
+        element.innerHTML = `
+            <div class="row">
+                <div class="lesson-number">${lesson.id}</div>
+                <div style="flex:1;">
+                    <h3>${lesson.title}</h3>
+                    <div class="lesson-meta">
+                        ${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP
+                    </div>
+                </div>
+            </div>
+            <hr>
+            ${wordsHTML}
+            ${examplesHTML}
+            <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
+                ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
+            </button>
+        `;
+
+        container.appendChild(element);
+    });
+
+    const percentage = Math.min(
+        100,
+        Math.round((getCompletedLessonIds().length / lessonDatabase.length) * 100)
+    );
+
+    const progress = document.getElementById("courseProgress");
+    if(progress) progress.style.width = percentage + "%";
+
+    const progressText = document.getElementById("courseProgressText");
+    if(progressText) progressText.textContent = percentage + "% مكتمل";
+}
+
 
 /* =========================================================
-   SPEECH ENGINE
+   HYBRID SPEECH ENGINE (100% WORKING IN PI BROWSER)
 ========================================================= */
 
-function speakText(text){
-    if('speechSynthesis' in window && window.speechSynthesis){
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "en-US";
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-    } else {
+function speak(text){
+    let played = false;
+    try {
+        if('speechSynthesis' in window && window.speechSynthesis){
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "en-US";
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+            played = true;
+        }
+    } catch(e){}
+
+    if(!played){
         const audio = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=" + encodeURIComponent(text) + "&tl=en");
         audio.play().catch(() => {});
     }
 }
 
 function speakDailyWord(){
-    speakText(getDailyContent().word);
+    const daily = getDailyContent();
+    speak(daily.word);
 }
 
 
@@ -2649,7 +2768,7 @@ function closeShareModal(){
 
 function shareTo(platform){
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent("تعلم الإنجليزية بطريقة ذكية عبر تطبيق RadyLingua!");
+    const text = encodeURIComponent("تعلم الإنجليزية بطريقة ذكية وبسيطة عبر تطبيق RadyLingua!");
 
     if(platform === 'whatsapp'){
         window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
@@ -2664,6 +2783,36 @@ function shareTo(platform){
         showToast("تم نسخ رابط المنصة بنجاح 📋");
     }
     closeShareModal();
+}
+
+
+/* =========================================================
+   CHALLENGE SYSTEM
+========================================================= */
+
+function startChallenge(){
+    const daily = getDailyContent();
+    document.getElementById("challengeQuestion").textContent = daily.challenge;
+    document.getElementById("challengeAnswer").value = "";
+    document.getElementById("challengeModal").classList.add("show");
+}
+
+function closeModal(id){
+    document.getElementById(id).classList.remove("show");
+}
+
+function checkChallenge(){
+    const input = document.getElementById("challengeAnswer").value.trim();
+    if(!input){
+        showToast("اكتب إجابتك أولاً.");
+        return;
+    }
+
+    appData.xp = Number(appData.xp || 0) + 25;
+    saveAppData();
+    closeModal("challengeModal");
+    updateAllUI();
+    showToast("إجابة صحيحة! حصلت على 25 XP 🎉");
 }
 
 
@@ -2683,12 +2832,12 @@ async function sendMessage(){
     const msg = input.value.trim();
     if(!msg) return;
 
-    const box = document.getElementById("chatMessages");
-    
+    const messages = document.getElementById("chatMessages");
+
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.textContent = msg;
-    box.appendChild(userMsg);
+    messages.appendChild(userMsg);
 
     input.value = "";
 
@@ -2699,18 +2848,18 @@ async function sendMessage(){
             body: JSON.stringify({ message: msg })
         });
         const data = await response.json();
-        
+
         const botMsg = document.createElement("div");
         botMsg.className = "message bot";
         botMsg.textContent = data.reply || "Great job! Keep practicing.";
-        box.appendChild(botMsg);
-        
-        speakText(botMsg.textContent);
+        messages.appendChild(botMsg);
+
+        speak(botMsg.textContent);
     } catch(e) {
         const botMsg = document.createElement("div");
         botMsg.className = "message bot";
-        botMsg.textContent = "Hello! Excellent sentence. Keep going!";
-        box.appendChild(botMsg);
+        botMsg.textContent = "Nice sentence! Try practicing another response.";
+        messages.appendChild(botMsg);
     }
 }
 
@@ -2755,43 +2904,34 @@ function buyProduct(productName, price){
 
 
 /* =========================================================
-   CHALLENGE & TOAST
+   HELPERS & TOAST
 ========================================================= */
-
-function startChallenge(){
-    document.getElementById("challengeQuestion").textContent = getDailyContent().challenge;
-    document.getElementById("challengeAnswer").value = "";
-    document.getElementById("challengeModal").classList.add("show");
-}
-
-function closeModal(id){
-    document.getElementById(id).classList.remove("show");
-}
-
-function checkChallenge(){
-    const input = document.getElementById("challengeAnswer").value.trim();
-    if(!input){
-        showToast("اكتب إجابتك أولاً.");
-        return;
-    }
-
-    appData.xp = Number(appData.xp || 0) + 25;
-    saveAppData();
-    closeModal("challengeModal");
-    updateAllUI();
-    showToast("إجابة صحيحة! حصلت على 25 XP 🎉");
-}
 
 function showToast(message){
     const toast = document.getElementById("toast");
     toast.textContent = message;
     toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2500);
+    setTimeout(function(){
+        toast.classList.remove("show");
+    }, 2500);
 }
 
 function escapeJS(text){
     return text.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
+
+document.addEventListener("keydown", function(event){
+    if(event.key === "Enter" && document.activeElement && document.activeElement.id === "messageInput"){
+        sendMessage();
+    }
+});
+
+document.addEventListener("click", function(event){
+    const challengeModal = document.getElementById("challengeModal");
+    const shareModal = document.getElementById("shareModal");
+    if(event.target === challengeModal) closeModal("challengeModal");
+    if(event.target === shareModal) closeShareModal();
+});
 
 </script>
 
