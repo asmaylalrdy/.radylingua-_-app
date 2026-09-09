@@ -978,6 +978,15 @@ button:disabled{
             تعلم الإنجليزية بطريقة ذكية، بسيطة وممتعة.
         </p>
 
+        <div class="lang-toggle-box">
+            <button class="lang-btn-option ar" onclick="selectLanguage('ar')">
+                🇸🇩 العربية
+            </button>
+            <button class="lang-btn-option en" onclick="selectLanguage('en')">
+                🇺🇸 English
+            </button>
+        </div>
+
         <div class="auth-box">
             <button class="auth-btn-item pi" onclick="loginWithPi()">
                 ⚡ Sign-in with Pi Network
@@ -1842,6 +1851,10 @@ function reloadApp(){
     window.location.reload();
 }
 
+function selectLanguage(lang){
+    showToast("تم اختيار اللغة");
+}
+
 /* ================= PI NETWORK AUTHENTICATION ================= */
 
 function loginWithPi(){
@@ -2130,15 +2143,21 @@ function updateUI(){
 /* ================= SPEECH ENGINE ================= */
 
 function speakText(text){
-    if('speechSynthesis' in window && window.speechSynthesis){
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "en-US";
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-    } else {
+    showToast("جاري التشغيل: " + text);
+    try {
+        if('speechSynthesis' in window && window.speechSynthesis){
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "en-US";
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            const audio = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=" + encodeURIComponent(text) + "&tl=en");
+            audio.play();
+        }
+    } catch(e) {
         const audio = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=" + encodeURIComponent(text) + "&tl=en");
-        audio.play().catch(() => {});
+        audio.play().catch(() => showToast("يرجى الضغط للتأكيد وتفعيل الصوت"));
     }
 }
 
