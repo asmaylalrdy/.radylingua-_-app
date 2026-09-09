@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const piApiKey = process.env.piApiKey;
 
   if (!piApiKey) {
-    return res.status(500).json({ error: "Missing piApiKey in Vercel" });
+    return res.status(500).json({ error: "piApiKey غير متوفر في Vercel" });
   }
 
   try {
@@ -16,6 +16,11 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       }
     });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      return res.status(response.status).send(errText);
+    }
 
     const data = await response.json();
     return res.status(200).json(data);
