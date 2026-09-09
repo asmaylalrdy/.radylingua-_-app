@@ -10,7 +10,11 @@
 
 <title>RadyLingua - رضي لينجوا</title>
 
+<!-- Pi Network SDK -->
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+<!-- Google OAuth SDK -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
 
@@ -958,7 +962,7 @@ button:disabled{
 
 
 <!-- =====================================================
-     WELCOME
+     WELCOME SCREEN
 ===================================================== -->
 
 <section id="welcomeScreen" class="screen active">
@@ -979,22 +983,22 @@ button:disabled{
         </p>
 
         <div class="lang-toggle-box">
-            <button id="welcomeLangAr" class="lang-btn-option ar" onclick="selectLanguageFromLanding('ar')">
-                <span class="flag">🇸🇩</span> العربية
+            <button class="lang-btn-option ar" onclick="selectLanguage('ar')">
+                🇸🇩 العربية
             </button>
-            <button id="welcomeLangEn" class="lang-btn-option en" onclick="selectLanguageFromLanding('en')">
-                <span class="flag">🇺🇸</span> English
+            <button class="lang-btn-option en" onclick="selectLanguage('en')">
+                🇺🇸 English
             </button>
         </div>
 
         <div class="auth-box">
-            <button class="auth-btn-item pi" onclick="loginProvider('Pi Network')">
+            <button class="auth-btn-item pi" onclick="loginWithPi()">
                 ⚡ Sign-in with Pi Network
             </button>
-            <button class="auth-btn-item" onclick="loginProvider('Google')">
+            <button class="auth-btn-item" onclick="loginWithGoogle()">
                 🌐 الدخول باستخدام Google
             </button>
-            <button class="auth-btn-item" onclick="loginProvider('Apple')">
+            <button class="auth-btn-item" onclick="loginWithApple()">
                 🍎 الدخول باستخدام Apple
             </button>
         </div>
@@ -1008,18 +1012,12 @@ button:disabled{
      MAIN APPLICATION
 ===================================================== -->
 
-<div
-    id="mainApp"
-    style="display:none;">
+<div id="mainApp" style="display:none;">
 
 
-<!-- =====================================================
-     HOME
-===================================================== -->
+<!-- ================= HOME ================= -->
 
-<section
-    id="homeScreen"
-    class="screen">
+<section id="homeScreen" class="screen">
 
 <header class="topbar">
 
@@ -1035,12 +1033,8 @@ button:disabled{
                 RadyLingua
             </strong>
 
-            <div
-                class="muted"
-                id="welcomeUser">
-
+            <div class="muted" id="welcomeUser">
                 أهلاً بك 👋
-
             </div>
 
         </div>
@@ -1065,22 +1059,18 @@ button:disabled{
 
 <div class="greeting">
 
-    <h2 id="homeTitle">
+    <h2>
         مرحباً بك في رضي لينجوا 👋
     </h2>
 
-    <div
-        class="muted"
-        id="homeSubtitle">
-
+    <div class="muted">
         واصل رحلة تعلم الإنجليزية
-
     </div>
 
 </div>
 
 
-<!-- ================= PROGRESS ================= -->
+<!-- PROGRESS -->
 
 <div class="card gradient-card">
 
@@ -1092,12 +1082,8 @@ button:disabled{
                 المستوى
             </div>
 
-            <div
-                id="levelValue"
-                style="font-size:34px;font-weight:bold;">
-
+            <div id="levelValue" style="font-size:34px;font-weight:bold;">
                 1
-
             </div>
 
         </div>
@@ -1108,23 +1094,13 @@ button:disabled{
 
     </div>
 
-    <div
-        style="margin-top:8px;"
-        id="streakText">
-
+    <div style="margin-top:8px;" id="streakText">
         7 أيام متتالية
-
     </div>
 
-    <div
-        class="progress"
-        style="background:rgba(255,255,255,.35);">
+    <div class="progress" style="background:rgba(255,255,255,.35);">
 
-        <div
-            id="levelProgress"
-            class="progress-fill"
-            style="width:25%;background:white;">
-
+        <div id="levelProgress" class="progress-fill" style="width:25%;background:white;">
         </div>
 
     </div>
@@ -1136,7 +1112,7 @@ button:disabled{
 </div>
 
 
-<!-- ================= STATS ================= -->
+<!-- STATS -->
 
 <div class="stats">
 
@@ -1179,7 +1155,7 @@ button:disabled{
 </div>
 
 
-<!-- ================= DAILY CHALLENGE ================= -->
+<!-- DAILY CHALLENGE -->
 
 <div class="challenge">
 
@@ -1187,29 +1163,22 @@ button:disabled{
         ⚡ تحدي اليوم
     </div>
 
-    <h2 id="challengeTitle">
+    <h2>
         ترجم الجملة
     </h2>
 
-    <p
-        id="dailyChallengeSentence"
-        style="font-size:18px;">
-
+    <p id="dailyChallengeSentence" style="font-size:18px;">
         I am learning English every day.
-
     </p>
 
-    <button
-        onclick="startChallenge()">
-
+    <button onclick="startChallenge()">
         ابدأ التحدي
-
     </button>
 
 </div>
 
 
-<!-- ================= DAILY WORD ================= -->
+<!-- DAILY WORD -->
 
 <div class="card">
 
@@ -1219,88 +1188,51 @@ button:disabled{
 
     <div class="daily-word">
 
-        <div
-            id="dailyWordEnglish"
-            class="english">
-
+        <div id="dailyWordEnglish" class="english">
             improve
-
         </div>
 
-        <div
-            id="dailyWordArabic"
-            class="arabic">
-
+        <div id="dailyWordArabic" class="arabic">
             يتحسن / يطوّر
-
         </div>
 
-        <button
-            class="speak-btn"
-            style="margin-top:12px;"
-            onclick="speakDailyWord()">
-
+        <button class="speak-btn" style="margin-top:12px;" onclick="speakDailyWord()">
             🔊 استمع للنطق
-
         </button>
 
     </div>
 
-    <div
-        id="dailyExample"
-        class="example-box">
-
+    <div id="dailyExample" class="example-box">
         I want to improve my English.
-
     </div>
 
 </div>
 
 
-<!-- ================= ACTIONS ================= -->
+<!-- ACTIONS GRID -->
 
 <div class="action-grid">
 
-    <button
-        class="action blue"
-        onclick="openScreen('lessonsScreen')">
-
-        📚<br>
-        متابعة الدروس
-
+    <button class="action blue" onclick="openScreen('lessonsScreen')">
+        📚<br>متابعة الدروس
     </button>
 
-    <button
-        class="action green"
-        onclick="openScreen('chatScreen')">
-
-        🤖<br>
-        AI Chat
-
+    <button class="action green" onclick="openScreen('chatScreen')">
+        🤖<br>AI Chat
     </button>
 
-    <button
-        class="action orange"
-        onclick="openScreen('achievementsScreen')">
-
-        🏆<br>
-        إنجازاتي
-
+    <button class="action orange" onclick="openScreen('achievementsScreen')">
+        🏆<br>إنجازاتي
     </button>
 
-    <button
-        class="action purple"
-        onclick="openScreen('storeScreen')">
-
-        🛒<br>
-        متجر RadyLingua
-
+    <button class="action purple" onclick="openScreen('storeScreen')">
+        🛒<br>متجر RadyLingua
     </button>
 
 </div>
 
 
-<!-- ================= DAILY LESSON ================= -->
+<!-- DAILY LESSON -->
 
 <div class="card">
 
@@ -1310,12 +1242,8 @@ button:disabled{
             درس اليوم
         </div>
 
-        <button
-            class="secondary-btn"
-            onclick="openScreen('lessonsScreen')">
-
+        <button class="secondary-btn" onclick="openScreen('lessonsScreen')">
             عرض الكل
-
         </button>
 
     </div>
@@ -1331,13 +1259,9 @@ button:disabled{
 </section>
 
 
-<!-- =====================================================
-     LESSONS
-===================================================== -->
+<!-- ================= LESSONS ================= -->
 
-<section
-    id="lessonsScreen"
-    class="screen">
+<section id="lessonsScreen" class="screen">
 
 <header class="topbar">
 
@@ -1347,12 +1271,8 @@ button:disabled{
         </strong>
     </div>
 
-    <button
-        class="secondary-btn"
-        onclick="openScreen('homeScreen')">
-
+    <button class="secondary-btn" onclick="openScreen('homeScreen')">
         الرئيسية
-
     </button>
 
 </header>
@@ -1372,21 +1292,13 @@ button:disabled{
 
         <div class="progress">
 
-            <div
-                id="courseProgress"
-                class="progress-fill"
-                style="width:0%;">
-
+            <div id="courseProgress" class="progress-fill" style="width:0%;">
             </div>
 
         </div>
 
-        <span
-            id="courseProgressText"
-            class="muted">
-
+        <span id="courseProgressText" class="muted">
             0% مكتمل
-
         </span>
 
     </div>
@@ -1395,19 +1307,14 @@ button:disabled{
     <div id="lessonsContainer">
     </div>
 
-
 </main>
 
 </section>
 
 
-<!-- =====================================================
-     CHAT
-===================================================== -->
+<!-- ================= CHAT ================= -->
 
-<section
-    id="chatScreen"
-    class="screen">
+<section id="chatScreen" class="screen">
 
 <header class="topbar">
 
@@ -1436,40 +1343,20 @@ button:disabled{
 
     <div class="action-grid">
 
-        <button
-            class="action blue"
-            onclick="startChat('doctor')">
-
-            🏥<br>
-            زيارة الطبيب
-
+        <button class="action blue" onclick="startChat('doctor')">
+            🏥<br>زيارة الطبيب
         </button>
 
-        <button
-            class="action green"
-            onclick="startChat('shopping')">
-
-            🛍️<br>
-            التسوق
-
+        <button class="action green" onclick="startChat('shopping')">
+            🛍️<br>التسوق
         </button>
 
-        <button
-            class="action orange"
-            onclick="startChat('hotel')">
-
-            🏨<br>
-            الفندق والسفر
-
+        <button class="action orange" onclick="startChat('hotel')">
+            🏨<br>الفندق والسفر
         </button>
 
-        <button
-            class="action purple"
-            onclick="startChat('job')">
-
-            💼<br>
-            مقابلة عمل
-
+        <button class="action purple" onclick="startChat('job')">
+            💼<br>مقابلة عمل
         </button>
 
     </div>
@@ -1477,16 +1364,11 @@ button:disabled{
 </div>
 
 
-<div
-    id="chatMessages"
-    class="chat-box">
+<div id="chatMessages" class="chat-box">
 
     <div class="message bot">
-
         👋 مرحباً! أنا مساعد RadyLingua.
-
         اختر موقفًا وابدأ التدريب باللغة الإنجليزية.
-
     </div>
 
 </div>
@@ -1496,13 +1378,9 @@ button:disabled{
 </section>
 
 
-<!-- =====================================================
-     ACHIEVEMENTS
-===================================================== -->
+<!-- ================= ACHIEVEMENTS ================= -->
 
-<section
-    id="achievementsScreen"
-    class="screen">
+<section id="achievementsScreen" class="screen">
 
 <header class="topbar">
 
@@ -1573,23 +1451,19 @@ button:disabled{
     <div class="action-grid">
 
         <div class="action orange">
-            🔥<br>
-            بداية قوية
+            🔥<br>بداية قوية
         </div>
 
         <div class="action blue">
-            📚<br>
-            محب التعلم
+            📚<br>محب التعلم
         </div>
 
         <div class="action green">
-            🗣️<br>
-            متحدث
+            🗣️<br>متحدث
         </div>
 
         <div class="action purple">
-            ⭐<br>
-            1000 XP
+            ⭐<br>1000 XP
         </div>
 
     </div>
@@ -1601,13 +1475,9 @@ button:disabled{
 </section>
 
 
-<!-- =====================================================
-     STORE
-===================================================== -->
+<!-- ================= STORE ================= -->
 
-<section
-    id="storeScreen"
-    class="screen">
+<section id="storeScreen" class="screen">
 
 <header class="topbar">
 
@@ -1623,10 +1493,6 @@ button:disabled{
 
     </div>
 
-    <div class="pi-balance">
-        π 0.00
-    </div>
-
 </header>
 
 
@@ -1639,8 +1505,7 @@ button:disabled{
     </h2>
 
     <p>
-        افتح محتوى تعليميًا متقدمًا
-        وميزات إضافية.
+        افتح محتوى تعليميًا متقدمًا وميزات إضافية.
     </p>
 
     <strong style="font-size:25px;">
@@ -1665,28 +1530,21 @@ button:disabled{
             </h3>
 
             <p class="muted">
-                كتاب تعليمي مع تدريبات
-                للمحادثة اليومية.
+                كتاب تعليمي مع تدريبات للمحادثة اليومية.
             </p>
 
         </div>
 
     </div>
 
-    <div
-        class="row"
-        style="margin-top:15px;">
+    <div class="row" style="margin-top:15px;">
 
         <span class="pi-price">
             10 π
         </span>
 
-        <button
-            class="buy-btn"
-            onclick="buyProduct('دليل المحادثة التفاعلي',10)">
-
+        <button class="buy-btn" onclick="buyProduct('دليل المحادثة التفاعلي',10)">
             اشترِ بـ π
-
         </button>
 
     </div>
@@ -1709,28 +1567,21 @@ button:disabled{
             </h3>
 
             <p class="muted">
-                دروس وكورسات متقدمة
-                لدعم رحلة التعلم.
+                دروس وكورسات متقدمة لدعم رحلة التعلم.
             </p>
 
         </div>
 
     </div>
 
-    <div
-        class="row"
-        style="margin-top:15px;">
+    <div class="row" style="margin-top:15px;">
 
         <span class="pi-price">
             40 π
         </span>
 
-        <button
-            class="buy-btn"
-            onclick="buyProduct('كورس الإنجليزية الشاملة',40)">
-
+        <button class="buy-btn" onclick="buyProduct('كورس الإنجليزية الشاملة',40)">
             اشترِ بـ π
-
         </button>
 
     </div>
@@ -1753,28 +1604,21 @@ button:disabled{
             </h3>
 
             <p class="muted">
-                تدريب متخصص على النطق
-                والمحادثة.
+                تدريب متخصص على النطق والمحادثة.
             </p>
 
         </div>
 
     </div>
 
-    <div
-        class="row"
-        style="margin-top:15px;">
+    <div class="row" style="margin-top:15px;">
 
         <span class="pi-price">
             16 π
         </span>
 
-        <button
-            class="buy-btn"
-            onclick="buyProduct('تدريب النطق بالذكاء الاصطناعي',16)">
-
+        <button class="buy-btn" onclick="buyProduct('تدريب النطق بالذكاء الاصطناعي',16)">
             اشترِ بـ π
-
         </button>
 
     </div>
@@ -1786,13 +1630,9 @@ button:disabled{
 </section>
 
 
-<!-- =====================================================
-     SETTINGS
-===================================================== -->
+<!-- ================= SETTINGS ================= -->
 
-<section
-    id="settingsScreen"
-    class="screen">
+<section id="settingsScreen" class="screen">
 
 <header class="topbar">
 
@@ -1813,11 +1653,8 @@ button:disabled{
             🌐 لغة التطبيق
         </strong>
 
-        <button
-            onclick="showWelcome()">
-
+        <button onclick="showWelcome()">
             تغيير
-
         </button>
 
     </div>
@@ -1832,11 +1669,8 @@ button:disabled{
             📢 مشاركة التطبيق
         </strong>
 
-        <button
-            onclick="openShareModal()">
-
+        <button onclick="openShareModal()">
             مشاركة
-
         </button>
 
     </div>
@@ -1850,9 +1684,7 @@ button:disabled{
     </strong>
 
     <p class="muted" style="margin-top:8px; line-height:1.6;">
-
         <strong>RadyLingua (رضي لينجوا)</strong> تطبيق تعليمي تفاعلي ذكي يساعد الناطقين باللغة العربية على تعلّم وممارسة اللغة الإنجليزية بسلاسة عبر الذكاء الاصطناعي وتقنيات تطبيقات Pi Network.
-
     </p>
 
 </div>
@@ -1864,10 +1696,8 @@ button:disabled{
     </strong>
 
     <p class="muted" style="margin-top:8px; line-height:1.6;">
-
         <strong>تطوير:</strong> Ismail Ahmed Ismail (إسماعيل أحمد إسماعيل)<br>
         <strong>البريد الإلكتروني:</strong> asmaylalrdy744@gmail.com
-
     </p>
 
 </div>
@@ -1880,9 +1710,7 @@ button:disabled{
     </strong>
 
     <p class="muted" style="margin-top:8px; line-height:1.6;">
-
         RadyLingua يحترم خصوصية المستخدم ولا يطلب بيانات غير ضرورية. يتم حفظ تقدمك وإحصائيات التعلم محلياً على جهازك لتوفير السرعة وسهولة الاستخدام.
-
     </p>
 
 </div>
@@ -1895,9 +1723,7 @@ button:disabled{
     </strong>
 
     <p class="muted" style="margin-top:8px; line-height:1.6;">
-
         استخدام التطبيق يعني الموافقة على شروط RadyLingua والاستفادة من المحتوى المتاح لأغراض التعلم الشخصي.
-
     </p>
 
 </div>
@@ -1907,117 +1733,45 @@ button:disabled{
 </section>
 
 
-<!-- =====================================================
-     BOTTOM NAVIGATION
-===================================================== -->
+<!-- ================= BOTTOM NAVIGATION ================= -->
 
-<nav
-    id="bottomNav"
-    class="bottom-nav">
+<nav id="bottomNav" class="bottom-nav">
 
-<button
-    class="nav-btn active"
-    data-screen="homeScreen"
-    onclick="openScreen('homeScreen')">
-
-    <span class="icon">
-        🏠
-    </span>
-
-    الرئيسية
-
+<button class="nav-btn active" data-screen="homeScreen" onclick="openScreen('homeScreen')">
+    <span class="icon">🏠</span>الرئيسية
 </button>
 
-
-<button
-    class="nav-btn"
-    data-screen="lessonsScreen"
-    onclick="openScreen('lessonsScreen')">
-
-    <span class="icon">
-        📚
-    </span>
-
-    الدروس
-
+<button class="nav-btn" data-screen="lessonsScreen" onclick="openScreen('lessonsScreen')">
+    <span class="icon">📚</span>الدروس
 </button>
 
-
-<button
-    class="nav-btn"
-    data-screen="chatScreen"
-    onclick="openScreen('chatScreen')">
-
-    <span class="icon">
-        💬
-    </span>
-
-    AI Chat
-
+<button class="nav-btn" data-screen="chatScreen" onclick="openScreen('chatScreen')">
+    <span class="icon">💬</span>AI Chat
 </button>
 
-
-<button
-    class="nav-btn"
-    data-screen="achievementsScreen"
-    onclick="openScreen('achievementsScreen')">
-
-    <span class="icon">
-        🏆
-    </span>
-
-    إنجازاتي
-
+<button class="nav-btn" data-screen="achievementsScreen" onclick="openScreen('achievementsScreen')">
+    <span class="icon">🏆</span>إنجازاتي
 </button>
 
-
-<button
-    class="nav-btn"
-    data-screen="storeScreen"
-    onclick="openScreen('storeScreen')">
-
-    <span class="icon">
-        🛒
-    </span>
-
-    المتجر
-
+<button class="nav-btn" data-screen="storeScreen" onclick="openScreen('storeScreen')">
+    <span class="icon">🛒</span>المتجر
 </button>
 
-<button
-    class="nav-btn"
-    data-screen="settingsScreen"
-    onclick="openScreen('settingsScreen')">
-
-    <span class="icon">
-        ⚙️
-    </span>
-
-    الإعدادات
-
+<button class="nav-btn" data-screen="settingsScreen" onclick="openScreen('settingsScreen')">
+    <span class="icon">⚙️</span>الإعدادات
 </button>
 
 </nav>
 
 
-<!-- =====================================================
-     CHAT INPUT
-===================================================== -->
+<!-- CHAT INPUT -->
 
-<div
-    id="chatInput"
-    class="chat-input">
+<div id="chatInput" class="chat-input">
 
-<input
-    id="messageInput"
-    type="text"
-    placeholder="اكتب رسالتك بالإنجليزية...">
+<input id="messageInput" type="text" placeholder="اكتب رسالتك بالإنجليزية...">
 
-<button
-    onclick="sendMessage()">
-
+<button onclick="sendMessage()">
     ➤
-
 </button>
 
 </div>
@@ -2025,149 +1779,61 @@ button:disabled{
 </div>
 
 
-<!-- =====================================================
-     SHARE MODAL
-===================================================== -->
+<!-- ================= SHARE MODAL ================= -->
 
-<div
-    id="shareModal"
-    class="modal">
+<div id="shareModal" class="modal">
 
 <div class="modal-box">
 
-<button
-    class="close"
-    onclick="closeShareModal()">
+<button class="close" onclick="closeShareModal()">×</button>
 
-    ×
-
-</button>
-
-<h3 style="margin-top:5px;">
-    📢 اختر منصة لمشاركة الرابط
-</h3>
+<h3 style="margin-top:5px;">📢 اختر منصة لمشاركة الرابط</h3>
 
 <div class="share-grid">
 
-    <button
-        class="share-btn-item whatsapp"
-        onclick="shareTo('whatsapp')">
+    <button class="share-btn-item whatsapp" onclick="shareTo('whatsapp')">واتساب</button>
 
-        واتساب
+    <button class="share-btn-item telegram" onclick="shareTo('telegram')">تلغرام</button>
 
-    </button>
+    <button class="share-btn-item facebook" onclick="shareTo('facebook')">فيس بوك</button>
 
-    <button
-        class="share-btn-item telegram"
-        onclick="shareTo('telegram')">
+    <button class="share-btn-item x" onclick="shareTo('x')">منصة X</button>
 
-        تلغرام
-
-    </button>
-
-    <button
-        class="share-btn-item facebook"
-        onclick="shareTo('facebook')">
-
-        فيس بوك
-
-    </button>
-
-    <button
-        class="share-btn-item x"
-        onclick="shareTo('x')">
-
-        منصة X
-
-    </button>
-
-    <button
-        class="share-btn-item copy"
-        onclick="shareTo('copy')">
-
-        📋 نسخ رابط المنصة
-
-    </button>
+    <button class="share-btn-item copy" onclick="shareTo('copy')">📋 نسخ رابط المنصة</button>
 
 </div>
 
-<button
-    class="secondary-btn"
-    style="width:100%; justify-content:center; margin-top:10px;"
-    onclick="closeShareModal()">
-
-    إغلاق
-
-</button>
+<button class="secondary-btn" style="width:100%; justify-content:center; margin-top:10px;" onclick="closeShareModal()">إغلاق</button>
 
 </div>
 
 </div>
 
 
-<!-- =====================================================
-     TOAST
-===================================================== -->
+<!-- TOAST -->
 
-<div
-    id="toast"
-    class="toast">
-</div>
+<div id="toast" class="toast"></div>
 
 
-<!-- =====================================================
-     CHALLENGE MODAL
-===================================================== -->
+<!-- CHALLENGE MODAL -->
 
-<div
-    id="challengeModal"
-    class="modal">
+<div id="challengeModal" class="modal">
 
 <div class="modal-box">
 
-<button
-    class="close"
-    onclick="closeModal('challengeModal')">
+<button class="close" onclick="closeModal('challengeModal')">×</button>
 
-    ×
+<h2>⚡ تحدي اليوم</h2>
 
-</button>
+<p>ترجم الجملة التالية إلى العربية:</p>
 
-<h2>
-    ⚡ تحدي اليوم
-</h2>
-
-<p>
-    ترجم الجملة التالية إلى العربية:
-</p>
-
-<div
-    id="challengeQuestion"
-    class="card"
-    style="font-size:20px;text-align:center;">
-
+<div id="challengeQuestion" class="card" style="font-size:20px;text-align:center;">
     I am learning English every day.
-
 </div>
 
-<input
-    id="challengeAnswer"
-    type="text"
-    placeholder="اكتب إجابتك هنا..."
-    style="
-        width:100%;
-        padding:14px;
-        border:1px solid #ddd;
-        border-radius:12px;
-        font-size:16px;">
+<input id="challengeAnswer" type="text" placeholder="اكتب إجابتك هنا..." style="width:100%; padding:14px; border:1px solid #ddd; border-radius:12px; font-size:16px;">
 
-<button
-    class="primary-btn"
-    onclick="checkChallenge()">
-
-    تحقق من الإجابة
-
-</button>
+<button class="primary-btn" onclick="checkChallenge()">تحقق من الإجابة</button>
 
 </div>
 
@@ -2176,268 +1842,229 @@ button:disabled{
 
 <script>
 
-/* =========================================================
-   USER DATA
-========================================================= */
+/* ================= LOCAL STORAGE DATA ================= */
 
-let currentLanguage = "ar";
-
-let appData = JSON.parse(
-    localStorage.getItem("rady_app_data") || "{}"
-);
+let appData = JSON.parse(localStorage.getItem("rady_app_data") || "{}");
 
 if(appData.xp === undefined) appData.xp = 0;
 if(appData.completedLessons === undefined) appData.completedLessons = 0;
 if(appData.streak === undefined) appData.streak = 7;
 if(appData.level === undefined) appData.level = 1;
-if(!appData.challengeCompleted) appData.challengeCompleted = {};
 
 function saveAppData(){
-    localStorage.setItem(
-        "rady_app_data",
-        JSON.stringify(appData)
-    );
+    localStorage.setItem("rady_app_data", JSON.stringify(appData));
 }
 
 
-/* =========================================================
-   PI SDK & AUTHENTICATION
-========================================================= */
+/* ================= PI NETWORK AUTHENTICATION ================= */
 
 let currentUser = null;
 
 try{
     if(window.Pi){
-        window.Pi.init({
-            version:"2.0",
-            sandbox:true
-        });
+        window.Pi.init({ version: "2.0", sandbox: true });
     }
 }catch(e){
-    console.log("Pi Init Error", e);
+    console.log("Pi SDK error", e);
 }
 
-function authenticatePiUser(callback){
-    if(window.Pi){
-        const scopes = ['username', 'payments'];
-        window.Pi.authenticate(scopes, onIncompletePaymentFound)
-        .then(function(auth) {
-            currentUser = auth.user;
-            showToast("أهلاً بك " + auth.user.username);
-            if(callback) callback();
-        }).catch(function(error) {
-            console.log("Auth error", error);
-            if(callback) callback();
-        });
-    } else {
-        if(callback) callback();
+function loginWithPi(){
+    if(!window.Pi){
+        showToast("يرجى فتح التطبيق داخل Pi Browser لاستخدام تسجيل الدخول بباي.");
+        startApplication("مستخدم Pi");
+        return;
+    }
+
+    const scopes = ['username', 'payments'];
+    
+    window.Pi.authenticate(scopes, function(payment){
+        console.log("Incomplete payment found:", payment);
+    }).then(function(auth) {
+        currentUser = auth.user;
+        showToast("تم الدخول بنجاح! أهلاً بك " + auth.user.username);
+        startApplication(auth.user.username);
+    }).catch(function(error) {
+        console.log("Pi Auth error:", error);
+        showToast("تعذر الدخول عبر Pi، تم الدخول كزائر.");
+        startApplication("مستخدم Pi");
+    });
+}
+
+
+/* ================= GOOGLE AUTH WITH ACCOUNT CHOOSER ================= */
+
+function loginWithGoogle(){
+    try {
+        if (window.google && window.google.accounts) {
+            const client = window.google.accounts.oauth2.initTokenClient({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // اختياري
+                scope: 'https://www.googleapis.com/auth/userinfo.profile',
+                prompt: 'select_account', // يجبر جوجل على إظهار قائمة اختيار الحسابات
+                callback: (response) => {
+                    if (response.access_token) {
+                        showToast("تم الدخول عبر جوجل بنجاح!");
+                        startApplication("حساب Google");
+                    }
+                },
+            });
+            client.requestAccessToken();
+        } else {
+            showToast("تم تسجيل الدخول باختيار حساب Google");
+            startApplication("حساب Google");
+        }
+    } catch(e) {
+        showToast("تم تسجيل الدخول عبر Google");
+        startApplication("حساب Google");
     }
 }
 
-function onIncompletePaymentFound(payment) {
-    console.log("Payment found incomplete", payment);
-};
-
-
-/* =========================================================
-   LESSONS DATABASE (FULL 8 LESSONS)
-========================================================= */
-
-const lessonDatabase = [
-
-{
-    id:1,
-    title:"التحيات الأساسية",
-    level:"مبتدئ",
-    duration:"5:30",
-    xp:50,
-    words:[
-        { english:"Hello", arabic:"مرحبًا" },
-        { english:"Good morning", arabic:"صباح الخير" }
-    ],
-    examples:[
-        "Hello! How are you?",
-        "Good morning, my friend."
-    ]
-},
-
-{
-    id:2,
-    title:"التعريف بالنفس",
-    level:"مبتدئ",
-    duration:"7:15",
-    xp:40,
-    words:[
-        { english:"My name is", arabic:"اسمي هو" },
-        { english:"I am from", arabic:"أنا من" }
-    ],
-    examples:[
-        "My name is Ahmed.",
-        "I am from Sudan."
-    ]
-},
-
-{
-    id:3,
-    title:"المحادثات اليومية",
-    level:"مبتدئ",
-    duration:"10:45",
-    xp:50,
-    words:[
-        { english:"How are you?", arabic:"كيف حالك؟" },
-        { english:"What's up?", arabic:"ما الأخبار؟" }
-    ],
-    examples:[
-        "How are you today?",
-        "What's up, my friend?"
-    ]
-},
-
-{
-    id:4,
-    title:"الوقت والأيام",
-    level:"مبتدئ",
-    duration:"8:20",
-    xp:45,
-    words:[
-        { english:"Today", arabic:"اليوم" },
-        { english:"Tomorrow", arabic:"غدًا" }
-    ],
-    examples:[
-        "I am busy today.",
-        "See you tomorrow."
-    ]
-},
-
-{
-    id:5,
-    title:"الطعام والشراب",
-    level:"مبتدئ",
-    duration:"9:10",
-    xp:55,
-    words:[
-        { english:"Water", arabic:"ماء" },
-        { english:"Food", arabic:"طعام" }
-    ],
-    examples:[
-        "I need some water.",
-        "The food is delicious."
-    ]
-},
-
-{
-    id:6,
-    title:"السفر",
-    level:"متوسط",
-    duration:"11:30",
-    xp:60,
-    words:[
-        { english:"Airport", arabic:"مطار" },
-        { english:"Ticket", arabic:"تذكرة" }
-    ],
-    examples:[
-        "Where is the airport?",
-        "I need a ticket."
-    ]
-},
-
-{
-    id:7,
-    title:"العمل",
-    level:"متوسط",
-    duration:"12:20",
-    xp:65,
-    words:[
-        { english:"Meeting", arabic:"اجتماع" },
-        { english:"Manager", arabic:"مدير" }
-    ],
-    examples:[
-        "The meeting starts at nine.",
-        "I need to speak with my manager."
-    ]
-},
-
-{
-    id:8,
-    title:"الإنجليزية التجارية",
-    level:"متقدم",
-    duration:"15:20",
-    xp:75,
-    words:[
-        { english:"Business", arabic:"أعمال" },
-        { english:"Customer", arabic:"عميل" }
-    ],
-    examples:[
-        "Our business is growing.",
-        "The customer is waiting."
-    ]
+function loginWithApple(){
+    showToast("تم تسجيل الدخول عبر Apple");
+    startApplication("حساب Apple");
 }
 
+
+/* ================= LESSONS DATABASE (FULL 8 LESSONS) ================= */
+
+const lessonDatabase = [
+    {
+        id:1,
+        title:"التحيات الأساسية",
+        level:"مبتدئ",
+        duration:"5:30",
+        xp:50,
+        words:[
+            { english:"Hello", arabic:"مرحبًا" },
+            { english:"Good morning", arabic:"صباح الخير" }
+        ],
+        examples:[
+            "Hello! How are you?",
+            "Good morning, my friend."
+        ]
+    },
+    {
+        id:2,
+        title:"التعريف بالنفس",
+        level:"مبتدئ",
+        duration:"7:15",
+        xp:40,
+        words:[
+            { english:"My name is", arabic:"اسمي هو" },
+            { english:"I am from", arabic:"أنا من" }
+        ],
+        examples:[
+            "My name is Ahmed.",
+            "I am from Sudan."
+        ]
+    },
+    {
+        id:3,
+        title:"المحادثات اليومية",
+        level:"مبتدئ",
+        duration:"10:45",
+        xp:50,
+        words:[
+            { english:"How are you?", arabic:"كيف حالك؟" },
+            { english:"What's up?", arabic:"ما الأخبار؟" }
+        ],
+        examples:[
+            "How are you today?",
+            "What's up, my friend?"
+        ]
+    },
+    {
+        id:4,
+        title:"الوقت والأيام",
+        level:"مبتدئ",
+        duration:"8:20",
+        xp:45,
+        words:[
+            { english:"Today", arabic:"اليوم" },
+            { english:"Tomorrow", arabic:"غدًا" }
+        ],
+        examples:[
+            "I am busy today.",
+            "See you tomorrow."
+        ]
+    },
+    {
+        id:5,
+        title:"الطعام والشراب",
+        level:"مبتدئ",
+        duration:"9:10",
+        xp:55,
+        words:[
+            { english:"Water", arabic:"ماء" },
+            { english:"Food", arabic:"طعام" }
+        ],
+        examples:[
+            "I need some water.",
+            "The food is delicious."
+        ]
+    },
+    {
+        id:6,
+        title:"السفر",
+        level:"متوسط",
+        duration:"11:30",
+        xp:60,
+        words:[
+            { english:"Airport", arabic:"مطار" },
+            { english:"Ticket", arabic:"تذكرة" }
+        ],
+        examples:[
+            "Where is the airport?",
+            "I need a ticket."
+        ]
+    },
+    {
+        id:7,
+        title:"العمل",
+        level:"متوسط",
+        duration:"12:20",
+        xp:65,
+        words:[
+            { english:"Meeting", arabic:"اجتماع" },
+            { english:"Manager", arabic:"مدير" }
+        ],
+        examples:[
+            "The meeting starts at nine.",
+            "I need to speak with my manager."
+        ]
+    },
+    {
+        id:8,
+        title:"الإنجليزية التجارية",
+        level:"متقدم",
+        duration:"15:20",
+        xp:75,
+        words:[
+            { english:"Business", arabic:"أعمال" },
+            { english:"Customer", arabic:"عميل" }
+        ],
+        examples:[
+            "Our business is growing.",
+            "The customer is waiting."
+        ]
+    }
 ];
 
-
-const dailyContent = [
-
-{
+const dailyContent = {
     word:"improve",
     arabic:"يتحسن / يطوّر",
     example:"I want to improve my English.",
-    challenge:"I practice English every morning.",
-    answer:[
-        "أنا أمارس الإنجليزية كل صباح",
-        "امارس الإنجليزية كل صباح"
-    ]
-}
-
-];
-
-function getDailyContent(){
-    return dailyContent[0];
-}
+    challenge:"I practice English every morning."
+};
 
 
-/* =========================================================
-   STARTUP & NAVIGATION
-========================================================= */
+/* ================= STARTUP & NAVIGATION ================= */
 
 window.addEventListener("load", function(){
     showWelcome();
 });
 
 function hideAllScreens(){
-    document.querySelectorAll(".screen").forEach(screen => {
-        screen.classList.remove("active");
-    });
-}
-
-function openScreen(id){
-    hideAllScreens();
-    const screen = document.getElementById(id);
-    if(screen){
-        screen.classList.add("active");
-    }
-
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.classList.remove("active");
-        if(btn.dataset.screen === id){
-            btn.classList.add("active");
-        }
-    });
-
-    const chatInput = document.getElementById("chatInput");
-    if(chatInput){
-        if(id === "chatScreen"){
-            chatInput.classList.add("active");
-        }else{
-            chatInput.classList.remove("active");
-        }
-    }
-
-    if(id === "lessonsScreen"){
-        renderLessons();
-    }
-
-    window.scrollTo({ top:0, behavior:"smooth" });
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
 }
 
 function showWelcome(){
@@ -2447,37 +2074,43 @@ function showWelcome(){
     document.getElementById("welcomeScreen").classList.add("active");
 }
 
-function selectLanguageFromLanding(language){
-    currentLanguage = language;
-    startApplication();
+function selectLanguage(lang){
+    showToast("تم اختيار اللغة");
 }
 
-function loginProvider(provider){
-    if(provider === 'Pi Network'){
-        authenticatePiUser(function(){
-            startApplication();
-        });
-    } else {
-        showToast("تم الدخول بواسطة " + provider);
-        startApplication();
-    }
-}
-
-function startApplication(){
+function startApplication(username){
     document.getElementById("welcomeScreen").classList.remove("active");
     document.getElementById("mainApp").style.display = "block";
     document.getElementById("bottomNav").classList.add("active");
+    if(username) document.getElementById("welcomeUser").textContent = "أهلاً بك (" + username + ") 👋";
     updateAllUI();
     openScreen("homeScreen");
 }
 
+function openScreen(id){
+    hideAllScreens();
+    const target = document.getElementById(id);
+    if(target) target.classList.add("active");
 
-/* =========================================================
-   UPDATE ALL UI
-========================================================= */
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.screen === id);
+    });
+
+    const chatInput = document.getElementById("chatInput");
+    if(chatInput){
+        chatInput.classList.toggle("active", id === "chatScreen");
+    }
+
+    if(id === "lessonsScreen"){
+        renderLessons();
+    }
+    window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+
+/* ================= UPDATE UI ================= */
 
 function updateAllUI(){
-    const daily = getDailyContent();
     const xp = Number(appData.xp || 0);
     const lessons = Number(appData.completedLessons || 0);
     const streak = Number(appData.streak || 7);
@@ -2491,10 +2124,10 @@ function updateAllUI(){
     document.getElementById("daysValue").textContent = streak;
     document.getElementById("achievementDays").textContent = streak;
 
-    document.getElementById("dailyWordEnglish").textContent = daily.word;
-    document.getElementById("dailyWordArabic").textContent = daily.arabic;
-    document.getElementById("dailyExample").textContent = daily.example;
-    document.getElementById("dailyChallengeSentence").textContent = daily.challenge;
+    document.getElementById("dailyWordEnglish").textContent = dailyContent.word;
+    document.getElementById("dailyWordArabic").textContent = dailyContent.arabic;
+    document.getElementById("dailyExample").textContent = dailyContent.example;
+    document.getElementById("dailyChallengeSentence").textContent = dailyContent.challenge;
 
     updateLevel();
     renderDailyLesson();
@@ -2508,22 +2141,14 @@ function updateLevel(){
 
     document.getElementById("levelValue").textContent = level;
     const progress = ((xp % 400) / 400) * 100;
-    document.getElementById("levelProgress").style.width = Math.max(8, progress) + "%";
+    document.getElementById("levelProgress").style.width = Math.max(10, progress) + "%";
 }
 
 
-/* =========================================================
-   LESSONS MANAGEMENT
-========================================================= */
+/* ================= LESSONS SYSTEM ================= */
 
 function getCompletedLessonIds(){
-    return JSON.parse(
-        localStorage.getItem("rady_completed_ids") || "[]"
-    );
-}
-
-function isLessonCompleted(id){
-    return getCompletedLessonIds().includes(id);
+    return JSON.parse(localStorage.getItem("rady_completed_ids") || "[]");
 }
 
 function renderDailyLesson(){
@@ -2531,7 +2156,7 @@ function renderDailyLesson(){
     if(!container) return;
 
     const lesson = lessonDatabase[0];
-    const completed = isLessonCompleted(lesson.id);
+    const completed = getCompletedLessonIds().includes(lesson.id);
 
     container.innerHTML = `
         <div class="lesson">
@@ -2539,9 +2164,7 @@ function renderDailyLesson(){
                 <div class="lesson-number">${lesson.id}</div>
                 <div style="flex:1;">
                     <h3>${lesson.title}</h3>
-                    <div class="lesson-meta">
-                        ${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP
-                    </div>
+                    <div class="lesson-meta">${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP</div>
                 </div>
             </div>
             <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
@@ -2556,80 +2179,48 @@ function renderLessons(){
     if(!container) return;
 
     container.innerHTML = "";
+    const completedIds = getCompletedLessonIds();
 
     lessonDatabase.forEach(lesson => {
-        const completed = isLessonCompleted(lesson.id);
+        const completed = completedIds.includes(lesson.id);
         const element = document.createElement("div");
         element.className = "lesson";
 
-        let wordsHTML = "";
-        lesson.words.forEach(word => {
-            wordsHTML += `
-                <p>
-                    <strong>${word.english}</strong> — ${word.arabic}
-                    <button class="speak-btn" onclick="speak('${escapeJS(word.english)}')">
-                        🔊 نطق
-                    </button>
-                </p>
-            `;
-        });
-
-        let examplesHTML = "";
-        lesson.examples.forEach(example => {
-            examplesHTML += `
-                <div class="example-box">
-                    ${example}<br>
-                    <button class="speak-btn" onclick="speak('${escapeJS(example)}')">
-                        🔊 استماع
-                    </button>
-                </div>
-            `;
-        });
+        let wordsHTML = lesson.words.map(w => `<p><strong>${w.english}</strong> — ${w.arabic} <button class="speak-btn" onclick="speakText('${escapeJS(w.english)}')">🔊 نطق</button></p>`).join("");
+        let examplesHTML = lesson.examples.map(ex => `<div class="example-box">${ex}<br><button class="speak-btn" onclick="speakText('${escapeJS(ex)}')">🔊 استماع</button></div>`).join("");
 
         element.innerHTML = `
             <div class="row">
                 <div class="lesson-number">${lesson.id}</div>
                 <div style="flex:1;">
                     <h3>${lesson.title}</h3>
-                    <div class="lesson-meta">
-                        ${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP
-                    </div>
+                    <div class="lesson-meta">${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP</div>
                 </div>
             </div>
-            <hr>
-            ${wordsHTML}
-            ${examplesHTML}
+            <hr>${wordsHTML}${examplesHTML}
             <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
                 ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
             </button>
         `;
-
         container.appendChild(element);
     });
 
-    const percentage = Math.min(
-        100,
-        Math.round((getCompletedLessonIds().length / lessonDatabase.length) * 100)
-    );
-
-    const progress = document.getElementById("courseProgress");
-    if(progress) progress.style.width = percentage + "%";
-
-    const progressText = document.getElementById("courseProgressText");
-    if(progressText) progressText.textContent = percentage + "% مكتمل";
+    const percentage = Math.min(100, Math.round((completedIds.length / lessonDatabase.length) * 100));
+    document.getElementById("courseProgress").style.width = percentage + "%";
+    document.getElementById("courseProgressText").textContent = percentage + "% مكتمل";
 }
 
 function completeLessonById(lessonId, button){
-    const completed = getCompletedLessonIds();
+    let completed = getCompletedLessonIds();
     if(completed.includes(lessonId)){
-        showToast("هذا الدرس مكتمل بالفعل ✅");
+        showToast("الدرس مكتمل بالفعل ✅");
         return;
     }
 
     completed.push(lessonId);
     localStorage.setItem("rady_completed_ids", JSON.stringify(completed));
 
-    const lesson = lessonDatabase.find(item => item.id === lessonId);
+    const lesson = lessonDatabase.find(l => l.id === lessonId);
     const reward = lesson ? lesson.xp : 40;
 
     appData.completedLessons = Number(appData.completedLessons || 0) + 1;
@@ -2647,11 +2238,9 @@ function completeLessonById(lessonId, button){
 }
 
 
-/* =========================================================
-   SPEECH ENGINE
-========================================================= */
+/* ================= SPEECH ENGINE ================= */
 
-function speak(text){
+function speakText(text){
     if('speechSynthesis' in window && window.speechSynthesis){
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
@@ -2665,83 +2254,34 @@ function speak(text){
 }
 
 function speakDailyWord(){
-    const daily = getDailyContent();
-    speak(daily.word);
+    speakText(dailyContent.word);
 }
 
 
-/* =========================================================
-   SHARE MODAL
-========================================================= */
+/* ================= SHARE MODAL ================= */
 
-function openShareModal(){
-    document.getElementById("shareModal").classList.add("show");
-}
-
-function closeShareModal(){
-    document.getElementById("shareModal").classList.remove("show");
-}
+function openShareModal(){ document.getElementById("shareModal").classList.add("show"); }
+function closeShareModal(){ document.getElementById("shareModal").classList.remove("show"); }
 
 function shareTo(platform){
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent("تعلم الإنجليزية بطريقة ذكية وبسيطة عبر تطبيق RadyLingua!");
+    const text = encodeURIComponent("تعلم الإنجليزية مع RadyLingua!");
 
-    if(platform === 'whatsapp'){
-        window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
-    } else if(platform === 'telegram'){
-        window.open(`https://t.me/share/url?url=${url}&text=${text}`);
-    } else if(platform === 'facebook'){
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
-    } else if(platform === 'x'){
-        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`);
-    } else if(platform === 'copy'){
+    if(platform === 'whatsapp') window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
+    else if(platform === 'telegram') window.open(`https://t.me/share/url?url=${url}&text=${text}`);
+    else if(platform === 'facebook') window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
+    else if(platform === 'x') window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`);
+    else if(platform === 'copy'){
         navigator.clipboard.writeText(window.location.href);
-        showToast("تم نسخ رابط المنصة بنجاح 📋");
+        showToast("تم نسخ رابط المنصة 📋");
     }
     closeShareModal();
 }
 
 
-/* =========================================================
-   CHALLENGE SYSTEM
-========================================================= */
+/* ================= AI CHAT ================= */
 
-function startChallenge(){
-    const daily = getDailyContent();
-    document.getElementById("challengeQuestion").textContent = daily.challenge;
-    document.getElementById("challengeAnswer").value = "";
-    document.getElementById("challengeModal").classList.add("show");
-}
-
-function closeModal(id){
-    document.getElementById(id).classList.remove("show");
-}
-
-function checkChallenge(){
-    const input = document.getElementById("challengeAnswer").value.trim();
-    if(!input){
-        showToast("اكتب إجابتك أولاً.");
-        return;
-    }
-
-    appData.xp = Number(appData.xp || 0) + 25;
-    saveAppData();
-    closeModal("challengeModal");
-    updateAllUI();
-    showToast("إجابة صحيحة! حصلت على 25 XP 🎉");
-}
-
-
-/* =========================================================
-   AI CHAT INTEGRATION
-========================================================= */
-
-let currentScenario = null;
-
-function startChat(type){
-    currentScenario = type;
-    openScreen("chatScreen");
-}
+function startChat(type){ openScreen("chatScreen"); }
 
 async function sendMessage(){
     const input = document.getElementById("messageInput");
@@ -2749,12 +2289,7 @@ async function sendMessage(){
     if(!msg) return;
 
     const messages = document.getElementById("chatMessages");
-
-    const userMsg = document.createElement("div");
-    userMsg.className = "message user";
-    userMsg.textContent = msg;
-    messages.appendChild(userMsg);
-
+    messages.innerHTML += `<div class="message user">${msg}</div>`;
     input.value = "";
 
     try {
@@ -2764,25 +2299,16 @@ async function sendMessage(){
             body: JSON.stringify({ message: msg })
         });
         const data = await response.json();
-
-        const botMsg = document.createElement("div");
-        botMsg.className = "message bot";
-        botMsg.textContent = data.reply || "Great job! Keep practicing.";
-        messages.appendChild(botMsg);
-
-        speak(botMsg.textContent);
+        const reply = data.reply || "Great job! Keep practicing.";
+        messages.innerHTML += `<div class="message bot">${reply}</div>`;
+        speakText(reply);
     } catch(e) {
-        const botMsg = document.createElement("div");
-        botMsg.className = "message bot";
-        botMsg.textContent = "Nice sentence! Try practicing another response.";
-        messages.appendChild(botMsg);
+        messages.innerHTML += `<div class="message bot">Awesome sentence! Keep going.</div>`;
     }
 }
 
 
-/* =========================================================
-   PI PAYMENTS INTEGRATION (WITH AUTH)
-========================================================= */
+/* ================= PI PAYMENTS ================= */
 
 function buyProduct(productName, price){
     if(!window.Pi){
@@ -2790,72 +2316,65 @@ function buyProduct(productName, price){
         return;
     }
 
-    const startPayment = function(){
-        try{
-            window.Pi.createPayment({
-                amount: price,
-                memo: "RadyLingua - " + productName,
-                metadata: { product: productName }
-            }, {
-                onReadyForServerApproval: function(paymentId){
-                    fetch("/api/approve", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ paymentId })
-                    }).then(() => showToast("تمت موافقة الخادم على طلب الدفع"));
-                },
-                onReadyForServerCompletion: function(paymentId, txid){
-                    fetch("/api/complete", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ paymentId, txid })
-                    }).then(() => showToast("تم إكمال الدفع بنجاح! 🎉"));
-                },
-                onCancel: function(){ showToast("تم إلغاء عملية الدفع."); },
-                onError: function(){ showToast("حدث خطأ أثناء عملية الدفع."); }
-            });
-        }catch(e){
-            showToast("تعذر بدء الدفع حاليًا.");
-        }
-    };
-
-    if(!currentUser){
-        authenticatePiUser(startPayment);
-    } else {
-        startPayment();
-    }
+    window.Pi.createPayment({
+        amount: price,
+        memo: "RadyLingua - " + productName,
+        metadata: { product: productName }
+    }, {
+        onReadyForServerApproval: function(paymentId){
+            fetch("/api/approve", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId })
+            }).then(() => showToast("تمت موافقة الخادم على الدفع"));
+        },
+        onReadyForServerCompletion: function(paymentId, txid){
+            fetch("/api/complete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId, txid })
+            }).then(() => showToast("تم إكمال الدفع بنجاح! 🎉"));
+        },
+        onCancel: function(){ showToast("تم إلغاء عملية الدفع."); },
+        onError: function(){ showToast("حدث خطأ أثناء عملية الدفع."); }
+    });
 }
 
 
-/* =========================================================
-   HELPERS & TOAST
-========================================================= */
+/* ================= CHALLENGE SYSTEM ================= */
+
+function startChallenge(){
+    document.getElementById("challengeQuestion").textContent = dailyContent.challenge;
+    document.getElementById("challengeAnswer").value = "";
+    document.getElementById("challengeModal").classList.add("show");
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
+
+function checkChallenge(){
+    const input = document.getElementById("challengeAnswer").value.trim();
+    if(!input) return showToast("اكتب إجابتك أولاً.");
+
+    appData.xp = Number(appData.xp || 0) + 25;
+    saveAppData();
+    closeModal("challengeModal");
+    updateAllUI();
+    showToast("إجابة صحيحة! حصلت على 25 XP 🎉");
+}
+
+
+/* ================= HELPERS ================= */
 
 function showToast(message){
     const toast = document.getElementById("toast");
     toast.textContent = message;
     toast.classList.add("show");
-    setTimeout(function(){
-        toast.classList.remove("show");
-    }, 2500);
+    setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
 function escapeJS(text){
     return text.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
-
-document.addEventListener("keydown", function(event){
-    if(event.key === "Enter" && document.activeElement && document.activeElement.id === "messageInput"){
-        sendMessage();
-    }
-});
-
-document.addEventListener("click", function(event){
-    const challengeModal = document.getElementById("challengeModal");
-    const shareModal = document.getElementById("shareModal");
-    if(event.target === challengeModal) closeModal("challengeModal");
-    if(event.target === shareModal) closeShareModal();
-});
 
 </script>
 
