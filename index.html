@@ -119,7 +119,6 @@ button:disabled{
     margin-bottom:15px;
 }
 
-/* LANGUAGE TOGGLE STYLES */
 .lang-toggle-box {
     display: flex;
     gap: 12px;
@@ -140,7 +139,6 @@ button:disabled{
     justify-content: center;
     gap: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .lang-btn-option.ar {
@@ -155,13 +153,6 @@ button:disabled{
     border-color: #93c5fd;
 }
 
-.lang-btn-option.selected {
-    transform: scale(1.04);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    border-width: 3px;
-}
-
-/* AUTH BUTTONS */
 .auth-box {
     width: 100%;
     max-width: 350px;
@@ -219,56 +210,13 @@ button:disabled{
     background:white;
     color:var(--text);
 
-    padding:13px 20px;
+    padding:9px 15px;
 
     border-radius:13px;
-    font-size:16px;
-}
-
-
-/* ================= LANGUAGE ================= */
-
-.language-box{
-    max-width:420px;
-    margin:auto;
-    padding:30px 20px;
-}
-
-.language-box h2{
-    text-align:center;
-    margin-bottom:25px;
-}
-
-.language-option{
-    width:100%;
-
-    background:white;
-
-    border:2px solid var(--border);
-
-    border-radius:18px;
-
-    padding:20px;
-
-    margin:10px 0;
-
-    display:flex;
+    font-size:14px;
+    display:inline-flex;
     align-items:center;
-
-    gap:15px;
-
-    font-size:18px;
-    font-weight:bold;
-}
-
-.language-option:hover,
-.language-option.selected{
-    border-color:var(--primary);
-    background:#eff6ff;
-}
-
-.flag{
-    font-size:32px;
+    gap:6px;
 }
 
 
@@ -277,7 +225,7 @@ button:disabled{
 .topbar{
     background:white;
 
-    padding:18px 16px;
+    padding:14px 16px;
 
     display:flex;
     align-items:center;
@@ -298,8 +246,8 @@ button:disabled{
 }
 
 .avatar{
-    width:45px;
-    height:45px;
+    width:42px;
+    height:42px;
 
     border-radius:50%;
 
@@ -312,17 +260,18 @@ button:disabled{
     justify-content:center;
     align-items:center;
 
-    font-size:23px;
+    font-size:20px;
 }
 
 .pi-balance{
     background:#fff7c2;
 
-    padding:9px 13px;
+    padding:8px 12px;
 
     border-radius:14px;
 
     font-weight:bold;
+    font-size:14px;
 }
 
 
@@ -834,7 +783,7 @@ button:disabled{
 
     display:none;
 
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(6,1fr);
 
     z-index:50;
 
@@ -852,7 +801,7 @@ button:disabled{
 
     color:#6b7280;
 
-    font-size:11px;
+    font-size:10px;
 
     display:flex;
 
@@ -863,10 +812,12 @@ button:disabled{
     justify-content:center;
 
     gap:4px;
+
+    padding: 0;
 }
 
 .nav-btn .icon{
-    font-size:22px;
+    font-size:20px;
 }
 
 .nav-btn.active{
@@ -1028,17 +979,12 @@ button:disabled{
         </h1>
 
         <p>
-
             رضي لينجوا<br>
-
-            تعلم الإنجليزية بطريقة ذكية،
-            بسيطة وممتعة.
-
+            تعلم الإنجليزية بطريقة ذكية، بسيطة وممتعة.
         </p>
 
-        <!-- اختيار اللغة بلونين أصلية ومميزة -->
         <div class="lang-toggle-box">
-            <button id="welcomeLangAr" class="lang-btn-option ar selected" onclick="selectLanguageFromLanding('ar')">
+            <button id="welcomeLangAr" class="lang-btn-option ar" onclick="selectLanguageFromLanding('ar')">
                 <span class="flag">🇸🇩</span> العربية
             </button>
             <button id="welcomeLangEn" class="lang-btn-option en" onclick="selectLanguageFromLanding('en')">
@@ -1046,7 +992,6 @@ button:disabled{
             </button>
         </div>
 
-        <!-- خيارات دخول خفيفة ومباشرة -->
         <div class="auth-box">
             <button class="auth-btn-item pi" onclick="loginProvider('Pi Network')">
                 ⚡ Sign-in with Pi Network
@@ -1058,71 +1003,6 @@ button:disabled{
                 🍎 الدخول باستخدام Apple
             </button>
         </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     LANGUAGE
-===================================================== -->
-
-<section id="languageScreen" class="screen">
-
-    <div class="language-box">
-
-        <div style="text-align:center;margin-top:40px;">
-
-            <div
-                class="logo"
-                style="margin:auto;">
-
-                🌐
-
-            </div>
-
-        </div>
-
-        <h2>
-            اختر لغة التطبيق
-        </h2>
-
-        <button
-            class="language-option"
-            onclick="selectLanguage('ar')">
-
-            <span class="flag">
-                🇸🇩
-            </span>
-
-            <span>
-                العربية
-            </span>
-
-        </button>
-
-        <button
-            class="language-option"
-            onclick="selectLanguage('en')">
-
-            <span class="flag">
-                🇺🇸
-            </span>
-
-            <span>
-                English
-            </span>
-
-        </button>
-
-        <p
-            class="muted"
-            style="text-align:center;margin-top:25px;">
-
-            يمكنك تغيير اللغة لاحقًا من الإعدادات.
-
-        </p>
 
     </div>
 
@@ -1172,13 +1052,14 @@ button:disabled{
 
     </div>
 
-    <div class="pi-balance">
+    <div style="display:flex; align-items:center; gap:8px;">
+        <button class="secondary-btn" onclick="shareApp()">
+            🔗 مشاركة
+        </button>
 
-        π
-        <span id="piBalance">
-            0.00
-        </span>
-
+        <div class="pi-balance">
+            π <span id="piBalance">0.00</span>
+        </div>
     </div>
 
 </header>
@@ -1220,7 +1101,7 @@ button:disabled{
                 id="levelValue"
                 style="font-size:34px;font-weight:bold;">
 
-                3
+                1
 
             </div>
 
@@ -1247,7 +1128,7 @@ button:disabled{
         <div
             id="levelProgress"
             class="progress-fill"
-            style="width:65%;background:white;">
+            style="width:20%;background:white;">
 
         </div>
 
@@ -1267,7 +1148,7 @@ button:disabled{
     <div class="stat">
 
         <strong id="xpValue">
-            1250
+            0
         </strong>
 
         <span>
@@ -1291,7 +1172,7 @@ button:disabled{
     <div class="stat">
 
         <strong id="lessonCount">
-            3
+            0
         </strong>
 
         <span>
@@ -1499,7 +1380,7 @@ button:disabled{
             <div
                 id="courseProgress"
                 class="progress-fill"
-                style="width:75%;">
+                style="width:0%;">
 
             </div>
 
@@ -1509,7 +1390,7 @@ button:disabled{
             id="courseProgressText"
             class="muted">
 
-            75% مكتمل
+            0% مكتمل
 
         </span>
 
@@ -1650,7 +1531,7 @@ button:disabled{
         <div class="stat">
 
             <strong id="achievementXP">
-                1250
+                0
             </strong>
 
             <span>
@@ -1674,7 +1555,7 @@ button:disabled{
         <div class="stat">
 
             <strong id="completedLessons">
-                3
+                0
             </strong>
 
             <span>
@@ -1938,9 +1819,28 @@ button:disabled{
         </strong>
 
         <button
-            onclick="changeLanguage()">
+            onclick="showWelcome()">
 
             تغيير
+
+        </button>
+
+    </div>
+
+</div>
+
+<div class="setting">
+
+    <div class="row">
+
+        <strong>
+            🔗 مشاركة التطبيق
+        </strong>
+
+        <button
+            onclick="shareApp()">
+
+            مشاركة
 
         </button>
 
@@ -2089,6 +1989,19 @@ button:disabled{
 
 </button>
 
+<button
+    class="nav-btn"
+    data-screen="settingsScreen"
+    onclick="openScreen('settingsScreen')">
+
+    <span class="icon">
+        ⚙️
+    </span>
+
+    الإعدادات
+
+</button>
+
 </nav>
 
 
@@ -2189,68 +2102,21 @@ button:disabled{
 <script>
 
 /* =========================================================
-   RadyLingua Dynamic Learning Engine
-   ========================================================= */
-
-
-/* =========================================================
-   CONFIGURATION
-========================================================= */
-
-const AI_API_URL = "";
-
-
-/* =========================================================
    USER DATA
 ========================================================= */
 
-let currentLanguage =
-    localStorage.getItem("rady_language") || null;
+let currentLanguage = "ar";
 
+let appData = JSON.parse(localStorage.getItem("rady_app_data") || "{}");
 
-let appData =
-    JSON.parse(
-        localStorage.getItem("rady_app_data") || "{}"
-    );
-
-
-if(!appData.xp){
-    appData.xp = 1250;
-}
-
-
-if(!appData.completedLessons){
-    appData.completedLessons = 3;
-}
-
-
-if(!appData.streak){
-    appData.streak = 7;
-}
-
-
-if(!appData.level){
-    appData.level = 3;
-}
-
-
-if(!appData.lastChallenge){
-    appData.lastChallenge = "";
-}
-
-
-if(!appData.challengeCompleted){
-    appData.challengeCompleted = {};
-}
-
+if(appData.xp === undefined) appData.xp = 0;
+if(appData.completedLessons === undefined) appData.completedLessons = 0;
+if(appData.streak === undefined) appData.streak = 7;
+if(appData.level === undefined) appData.level = 1;
+if(!appData.challengeCompleted) appData.challengeCompleted = {};
 
 function saveAppData(){
-
-    localStorage.setItem(
-        "rady_app_data",
-        JSON.stringify(appData)
-    );
-
+    localStorage.setItem("rady_app_data", JSON.stringify(appData));
 }
 
 
@@ -2258,2293 +2124,442 @@ function saveAppData(){
    PI SDK
 ========================================================= */
 
-let piInitialized = false;
-
 try{
-
     if(window.Pi){
-
-        window.Pi.init({
-
-            version:"2.0",
-
-            sandbox:true
-
-        });
-
-        piInitialized = true;
-
-        console.log(
-            "RadyLingua: Pi SDK initialized."
-        );
-
+        window.Pi.init({ version:"2.0", sandbox:true });
     }
-
-}catch(error){
-
-    console.log(
-        "Pi SDK initialization error:",
-        error
-    );
-
-}
+}catch(e){}
 
 
 /* =========================================================
-   DYNAMIC CONTENT DATABASE
+   LESSONS DATABASE
 ========================================================= */
 
 const lessonDatabase = [
-
 {
     id:1,
-
     title:"التحيات الأساسية",
-
     level:"مبتدئ",
-
     duration:"5:30",
-
     xp:50,
-
     words:[
-        {
-            english:"Hello",
-            arabic:"مرحبًا"
-        },
-        {
-            english:"Good morning",
-            arabic:"صباح الخير"
-        }
+        { english:"Hello", arabic:"مرحبًا" },
+        { english:"Good morning", arabic:"صباح الخير" }
     ],
-
     examples:[
         "Hello! How are you?",
         "Good morning, my friend."
     ]
-
 },
-
 {
     id:2,
-
     title:"التعريف بالنفس",
-
     level:"مبتدئ",
-
     duration:"7:15",
-
     xp:40,
-
     words:[
-        {
-            english:"My name is",
-            arabic:"اسمي هو"
-        },
-        {
-            english:"I am from",
-            arabic:"أنا من"
-        }
+        { english:"My name is", arabic:"اسمي هو" },
+        { english:"I am from", arabic:"أنا من" }
     ],
-
     examples:[
         "My name is Ahmed.",
         "I am from Sudan."
     ]
-
 },
-
 {
     id:3,
-
     title:"المحادثات اليومية",
-
     level:"مبتدئ",
-
     duration:"10:45",
-
     xp:50,
-
     words:[
-        {
-            english:"How are you?",
-            arabic:"كيف حالك؟"
-        },
-        {
-            english:"What's up?",
-            arabic:"ما الأخبار؟"
-        }
+        { english:"How are you?", arabic:"كيف حالك؟" },
+        { english:"What's up?", arabic:"ما الأخبار؟" }
     ],
-
     examples:[
         "How are you today?",
         "What's up, my friend?"
     ]
-
 },
-
 {
     id:4,
-
     title:"الوقت والأيام",
-
     level:"مبتدئ",
-
     duration:"8:20",
-
     xp:45,
-
     words:[
-        {
-            english:"Today",
-            arabic:"اليوم"
-        },
-        {
-            english:"Tomorrow",
-            arabic:"غدًا"
-        }
+        { english:"Today", arabic:"اليوم" },
+        { english:"Tomorrow", arabic:"غدًا" }
     ],
-
     examples:[
         "I am busy today.",
         "See you tomorrow."
     ]
-
 },
-
 {
     id:5,
-
     title:"الطعام والشراب",
-
     level:"مبتدئ",
-
     duration:"9:10",
-
     xp:55,
-
     words:[
-        {
-            english:"Water",
-            arabic:"ماء"
-        },
-        {
-            english:"Food",
-            arabic:"طعام"
-        }
+        { english:"Water", arabic:"ماء" },
+        { english:"Food", arabic:"طعام" }
     ],
-
     examples:[
         "I need some water.",
         "The food is delicious."
     ]
-
 },
-
 {
     id:6,
-
     title:"السفر",
-
     level:"متوسط",
-
     duration:"11:30",
-
     xp:60,
-
     words:[
-        {
-            english:"Airport",
-            arabic:"مطار"
-        },
-        {
-            english:"Ticket",
-            arabic:"تذكرة"
-        }
+        { english:"Airport", arabic:"مطار" },
+        { english:"Ticket", arabic:"تذكرة" }
     ],
-
     examples:[
         "Where is the airport?",
         "I need a ticket."
     ]
-
 },
-
 {
     id:7,
-
     title:"العمل",
-
     level:"متوسط",
-
     duration:"12:20",
-
     xp:65,
-
     words:[
-        {
-            english:"Meeting",
-            arabic:"اجتماع"
-        },
-        {
-            english:"Manager",
-            arabic:"مدير"
-        }
+        { english:"Meeting", arabic:"اجتماع" },
+        { english:"Manager", arabic:"مدير" }
     ],
-
     examples:[
         "The meeting starts at nine.",
         "I need to speak with my manager."
     ]
-
 },
-
 {
     id:8,
-
     title:"الإنجليزية التجارية",
-
     level:"متقدم",
-
     duration:"15:20",
-
     xp:75,
-
     words:[
-        {
-            english:"Business",
-            arabic:"أعمال"
-        },
-        {
-            english:"Customer",
-            arabic:"عميل"
-        }
+        { english:"Business", arabic:"أعمال" },
+        { english:"Customer", arabic:"عميل" }
     ],
-
     examples:[
         "Our business is growing.",
         "The customer is waiting."
     ]
-
 }
-
 ];
-
-
-/* =========================================================
-   DAILY DYNAMIC CONTENT
-========================================================= */
 
 const dailyContent = [
-
 {
     word:"improve",
-
     arabic:"يتحسن / يطوّر",
-
     example:"I want to improve my English.",
-
     challenge:"I practice English every morning.",
-
-    answer:[
-        "أنا أمارس الإنجليزية كل صباح",
-        "امارس الإنجليزية كل صباح",
-        "أنا أتمرن على الإنجليزية كل صباح"
-    ]
-
-},
-
-{
-    word:"learn",
-
-    arabic:"يتعلم",
-
-    example:"I learn something new every day.",
-
-    challenge:"I learn something new every day.",
-
-    answer:[
-        "أنا أتعلم شيئًا جديدًا كل يوم",
-        "اتعلم شيئا جديدا كل يوم",
-        "أنا اتعلم شيء جديد كل يوم"
-    ]
-
-},
-
-{
-    word:"practice",
-
-    arabic:"يمارس / يتدرب",
-
-    example:"Practice makes you better.",
-
-    challenge:"I practice speaking English every day.",
-
-    answer:[
-        "أنا أتدرب على التحدث بالإنجليزية كل يوم",
-        "اتدرب على التحدث بالانجليزية كل يوم"
-    ]
-
-},
-
-{
-    word:"understand",
-
-    arabic:"يفهم",
-
-    example:"I understand the lesson.",
-
-    challenge:"I understand English better now.",
-
-    answer:[
-        "أنا أفهم الإنجليزية بشكل أفضل الآن",
-        "افهم الإنجليزية بشكل أفضل الآن"
-    ]
-
-},
-
-{
-    word:"remember",
-
-    arabic:"يتذكر",
-
-    example:"I remember new words easily.",
-
-    challenge:"I remember new English words.",
-
-    answer:[
-        "أنا أتذكر كلمات إنجليزية جديدة",
-        "اتذكر كلمات انجليزية جديدة"
-    ]
-
-},
-
-{
-    word:"speak",
-
-    arabic:"يتحدث",
-
-    example:"I speak English with my friends.",
-
-    challenge:"I speak English with confidence.",
-
-    answer:[
-        "أنا أتحدث الإنجليزية بثقة",
-        "اتحدث الإنجليزية بثقة"
-    ]
-
-},
-
-{
-    word:"listen",
-
-    arabic:"يستمع",
-
-    example:"I listen to English every day.",
-
-    challenge:"I listen to English lessons every day.",
-
-    answer:[
-        "أنا أستمع إلى دروس الإنجليزية كل يوم",
-        "استمع إلى دروس الانجليزية كل يوم"
-    ]
-
+    answer:["أنا أمارس الإنجليزية كل صباح", "امارس الإنجليزية كل صباح"]
 }
-
 ];
 
-
-/* =========================================================
-   GET DAILY INDEX
-========================================================= */
-
-function getDayIndex(){
-
-    const now =
-        new Date();
-
-    const start =
-        new Date(
-            now.getFullYear(),
-            0,
-            0
-        );
-
-    const diff =
-        now - start;
-
-    const oneDay =
-        1000 * 60 * 60 * 24;
-
-    const day =
-        Math.floor(
-            diff / oneDay
-        );
-
-    return day;
-
-}
-
-
-function getDailyContent(){
-
-    const index =
-        getDayIndex()
-        % dailyContent.length;
-
-    return dailyContent[index];
-
-}
+function getDailyContent(){ return dailyContent[0]; }
 
 
 /* =========================================================
-   STARTUP
+   STARTUP & NAVIGATION
 ========================================================= */
 
-window.addEventListener(
-    "load",
-    function(){
-
-        updateAllUI();
-
-        if(currentLanguage){
-
-            startApplication();
-
-        }else{
-
-            showWelcome();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
+window.addEventListener("load", function(){
+    showWelcome();
+});
 
 function hideAllScreens(){
-
-    document
-        .querySelectorAll(".screen")
-        .forEach(
-            screen=>{
-                screen.classList.remove("active");
-            }
-        );
-
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 }
-
-
-function openScreen(id){
-
-    hideAllScreens();
-
-    const screen =
-        document.getElementById(id);
-
-    if(screen){
-
-        screen.classList.add("active");
-
-    }
-
-    document
-        .querySelectorAll(".nav-btn")
-        .forEach(
-            btn=>{
-
-                btn.classList.remove("active");
-
-                if(
-                    btn.dataset.screen === id
-                ){
-
-                    btn.classList.add("active");
-
-                }
-
-            }
-        );
-
-
-    const chatInput =
-        document.getElementById(
-            "chatInput"
-        );
-
-
-    if(chatInput){
-
-        if(id === "chatScreen"){
-
-            chatInput.classList.add("active");
-
-        }else{
-
-            chatInput.classList.remove("active");
-
-        }
-
-    }
-
-
-    if(id === "lessonsScreen"){
-
-        renderLessons();
-
-    }
-
-
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
-    });
-
-}
-
-
-/* =========================================================
-   LANGUAGE & WELCOME
-========================================================= */
 
 function showWelcome(){
-
     hideAllScreens();
-
-    document
-        .getElementById("welcomeScreen")
-        .classList.add("active");
-
+    document.getElementById("mainApp").style.display = "none";
+    document.getElementById("bottomNav").classList.remove("active");
+    document.getElementById("welcomeScreen").classList.add("active");
 }
 
-function showLanguage(){
-
-    hideAllScreens();
-
-    document
-        .getElementById("languageScreen")
-        .classList.add("active");
-
-}
-
-function selectLanguageFromLanding(language){
-    const arBtn = document.getElementById("welcomeLangAr");
-    const enBtn = document.getElementById("welcomeLangEn");
-    if(arBtn && enBtn){
-        arBtn.classList.toggle("selected", language === 'ar');
-        enBtn.classList.toggle("selected", language === 'en');
-    }
-    selectLanguage(language);
+function selectLanguageFromLanding(lang){
+    currentLanguage = lang;
+    startApplication();
 }
 
 function loginProvider(provider){
-    showToast("جاري الدخول عبر " + provider);
+    showToast("تم الدخول بواسطة " + provider);
     startApplication();
 }
-
-function selectLanguage(language){
-
-    currentLanguage =
-        language;
-
-    localStorage.setItem(
-        "rady_language",
-        language
-    );
-
-    startApplication();
-
-}
-
-
-function changeLanguage(){
-
-    localStorage.removeItem(
-        "rady_language"
-    );
-
-    currentLanguage =
-        null;
-
-    document
-        .getElementById("mainApp")
-        .style.display="none";
-
-    document
-        .getElementById("bottomNav")
-        .classList.remove("active");
-
-    showLanguage();
-
-}
-
 
 function startApplication(){
-
-    document
-        .getElementById("welcomeScreen")
-        .classList.remove("active");
-
-    document
-        .getElementById("languageScreen")
-        .classList.remove("active");
-
-    document
-        .getElementById("mainApp")
-        .style.display="block";
-
-    document
-        .getElementById("bottomNav")
-        .classList.add("active");
-
-    applyLanguageDirection();
-
+    hideAllScreens();
+    document.getElementById("welcomeScreen").classList.remove("active");
+    document.getElementById("mainApp").style.display = "block";
+    document.getElementById("bottomNav").classList.add("active");
     updateAllUI();
-
-    openScreen(
-        "homeScreen"
-    );
-
+    openScreen("homeScreen");
 }
 
+function openScreen(id){
+    hideAllScreens();
+    const screen = document.getElementById(id);
+    if(screen) screen.classList.add("active");
 
-/* =========================================================
-   LANGUAGE DIRECTION
-========================================================= */
+    document.querySelectorAll(".nav-btn").forEach(btn=>{
+        btn.classList.remove("active");
+        if(btn.dataset.screen === id) btn.classList.add("active");
+    });
 
-function applyLanguageDirection(){
-
-    const html =
-        document.documentElement;
-
-    if(currentLanguage === "en"){
-
-        html.lang="en";
-
-        html.dir="ltr";
-
-        document.body.style.direction="ltr";
-
-    }else{
-
-        html.lang="ar";
-
-        html.dir="rtl";
-
-        document.body.style.direction="rtl";
-
+    const chatInput = document.getElementById("chatInput");
+    if(chatInput){
+        if(id === "chatScreen") chatInput.classList.add("active");
+        else chatInput.classList.remove("active");
     }
 
+    if(id === "lessonsScreen") renderLessons();
+    window.scrollTo({ top:0, behavior:"smooth" });
 }
 
 
 /* =========================================================
-   UPDATE ALL UI
+   UI & PROGRESS UPDATES
 ========================================================= */
 
 function updateAllUI(){
+    const daily = getDailyContent();
+    const xp = Number(appData.xp || 0);
+    const lessons = Number(appData.completedLessons || 0);
+    const streak = Number(appData.streak || 7);
 
-    const daily =
-        getDailyContent();
+    document.getElementById("xpValue").textContent = xp;
+    document.getElementById("achievementXP").textContent = xp;
 
+    document.getElementById("lessonCount").textContent = lessons;
+    document.getElementById("completedLessons").textContent = lessons;
 
-    const xp =
-        Number(appData.xp || 0);
+    document.getElementById("daysValue").textContent = streak;
+    document.getElementById("achievementDays").textContent = streak;
 
-    const lessons =
-        Number(
-            appData.completedLessons || 0
-        );
-
-    const streak =
-        Number(
-            appData.streak || 0
-        );
-
-
-    const xpElements = [
-        "xpValue",
-        "achievementXP"
-    ];
-
-    xpElements.forEach(
-        id=>{
-
-            const element =
-                document.getElementById(id);
-
-            if(element){
-
-                element.textContent =
-                    xp;
-
-            }
-
-        }
-    );
-
-
-    const lessonElements = [
-        "lessonCount",
-        "completedLessons"
-    ];
-
-    lessonElements.forEach(
-        id=>{
-
-            const element =
-                document.getElementById(id);
-
-            if(element){
-
-                element.textContent =
-                    lessons;
-
-            }
-
-        }
-    );
-
-
-    const days =
-        document.getElementById(
-            "daysValue"
-        );
-
-    if(days){
-
-        days.textContent =
-            streak;
-
-    }
-
-
-    const achievementDays =
-        document.getElementById(
-            "achievementDays"
-        );
-
-    if(achievementDays){
-
-        achievementDays.textContent =
-            streak;
-
-    }
-
-
-    const streakText =
-        document.getElementById(
-            "streakText"
-        );
-
-    if(streakText){
-
-        streakText.textContent =
-            streak +
-            " أيام متتالية";
-
-    }
-
-
-    const word =
-        document.getElementById(
-            "dailyWordEnglish"
-        );
-
-    if(word){
-
-        word.textContent =
-            daily.word;
-
-    }
-
-
-    const arabic =
-        document.getElementById(
-            "dailyWordArabic"
-        );
-
-    if(arabic){
-
-        arabic.textContent =
-            daily.arabic;
-
-    }
-
-
-    const example =
-        document.getElementById(
-            "dailyExample"
-        );
-
-    if(example){
-
-        example.textContent =
-            daily.example;
-
-    }
-
-
-    const challenge =
-        document.getElementById(
-            "dailyChallengeSentence"
-        );
-
-    if(challenge){
-
-        challenge.textContent =
-            daily.challenge;
-
-    }
-
-
-    const question =
-        document.getElementById(
-            "challengeQuestion"
-        );
-
-    if(question){
-
-        question.textContent =
-            daily.challenge;
-
-    }
-
+    document.getElementById("dailyWordEnglish").textContent = daily.word;
+    document.getElementById("dailyWordArabic").textContent = daily.arabic;
+    document.getElementById("dailyExample").textContent = daily.example;
+    document.getElementById("dailyChallengeSentence").textContent = daily.challenge;
 
     updateLevel();
-
     renderDailyLesson();
-
 }
-
-
-/* =========================================================
-   LEVEL SYSTEM
-========================================================= */
 
 function updateLevel(){
-
-    const xp =
-        Number(appData.xp || 0);
-
-    const level =
-        Math.max(
-            1,
-            Math.floor(xp / 400) + 1
-        );
-
-    appData.level =
-        level;
-
+    const xp = Number(appData.xp || 0);
+    const level = Math.max(1, Math.floor(xp / 400) + 1);
+    appData.level = level;
     saveAppData();
 
-
-    const levelElement =
-        document.getElementById(
-            "levelValue"
-        );
-
-    if(levelElement){
-
-        levelElement.textContent =
-            level;
-
-    }
-
-
-    const progress =
-        ((xp % 400) / 400) * 100;
-
-
-    const progressElement =
-        document.getElementById(
-            "levelProgress"
-        );
-
-    if(progressElement){
-
-        progressElement.style.width =
-            Math.max(
-                8,
-                progress
-            ) + "%";
-
-    }
-
+    document.getElementById("levelValue").textContent = level;
+    const progress = ((xp % 400) / 400) * 100;
+    document.getElementById("levelProgress").style.width = Math.max(10, progress) + "%";
 }
 
 
 /* =========================================================
-   DAILY LESSON
-========================================================= */
-
-function getDailyLesson(){
-
-    const index =
-        getDayIndex()
-        % lessonDatabase.length;
-
-    return lessonDatabase[index];
-
-}
-
-
-function renderDailyLesson(){
-
-    const container =
-        document.getElementById(
-            "dailyLessonHome"
-        );
-
-    if(!container){
-
-        return;
-
-    }
-
-
-    const lesson =
-        getDailyLesson();
-
-
-    const completed =
-        isLessonCompleted(
-            lesson.id
-        );
-
-
-    container.innerHTML = `
-
-        <div class="lesson">
-
-            <div class="row">
-
-                <div class="lesson-number">
-                    ${lesson.id}
-                </div>
-
-                <div style="flex:1;">
-
-                    <h3>
-                        ${lesson.title}
-                    </h3>
-
-                    <div class="lesson-meta">
-
-                        ${lesson.level}
-                        •
-                        ${lesson.duration}
-                        دقيقة
-                        •
-                        ${lesson.xp}
-                        XP
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="progress">
-
-                <div
-                    class="progress-fill"
-                    style="
-                        width:${completed ? 100 : 0}%;
-                    ">
-
-                </div>
-
-            </div>
-
-            <button
-                class="lesson-btn ${completed ? "completed" : ""}"
-                onclick="completeLessonById(${lesson.id},this)">
-
-                ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   LESSON COMPLETION
+   LESSONS MANAGEMENT
 ========================================================= */
 
 function getCompletedLessonIds(){
-
-    return JSON.parse(
-        localStorage.getItem(
-            "rady_completed_ids"
-        ) || "[]"
-    );
-
+    return JSON.parse(localStorage.getItem("rady_completed_ids") || "[]");
 }
-
 
 function isLessonCompleted(id){
-
-    return getCompletedLessonIds()
-        .includes(id);
-
+    return getCompletedLessonIds().includes(id);
 }
 
+function renderDailyLesson(){
+    const container = document.getElementById("dailyLessonHome");
+    if(!container) return;
 
-function completeLessonById(
-    lessonId,
-    button
-){
+    const lesson = lessonDatabase[0];
+    const completed = isLessonCompleted(lesson.id);
 
-    const completed =
-        getCompletedLessonIds();
-
-
-    if(
-        completed.includes(
-            lessonId
-        )
-    ){
-
-        showToast(
-            "هذا الدرس مكتمل بالفعل ✅"
-        );
-
-        return;
-
-    }
-
-
-    completed.push(
-        lessonId
-    );
-
-
-    localStorage.setItem(
-        "rady_completed_ids",
-        JSON.stringify(completed)
-    );
-
-
-    const lesson =
-        lessonDatabase.find(
-            item =>
-                item.id === lessonId
-        );
-
-
-    const reward =
-        lesson
-        ? lesson.xp
-        : 40;
-
-
-    appData.completedLessons =
-        Number(
-            appData.completedLessons || 0
-        ) + 1;
-
-
-    appData.xp =
-        Number(
-            appData.xp || 0
-        ) + reward;
-
-
-    saveAppData();
-
-
-    if(button){
-
-        button.textContent =
-            "✓ مكتمل";
-
-        button.disabled =
-            true;
-
-        button.classList.add(
-            "completed"
-        );
-
-    }
-
-
-    updateAllUI();
-
-
-    showToast(
-        "أحسنت! حصلت على " +
-        reward +
-        " XP 🎉"
-    );
-
+    container.innerHTML = `
+        <div class="lesson">
+            <div class="row">
+                <div class="lesson-number">${lesson.id}</div>
+                <div style="flex:1;">
+                    <h3>${lesson.title}</h3>
+                    <div class="lesson-meta">${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP</div>
+                </div>
+            </div>
+            <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
+                ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
+            </button>
+        </div>
+    `;
 }
-
-
-function completeLesson(button){
-
-    const lesson =
-        getDailyLesson();
-
-    completeLessonById(
-        lesson.id,
-        button
-    );
-
-}
-
-
-/* =========================================================
-   RENDER LESSONS
-========================================================= */
 
 function renderLessons(){
-
-    const container =
-        document.getElementById(
-            "lessonsContainer"
-        );
-
-    if(!container){
-
-        return;
-
-    }
-
+    const container = document.getElementById("lessonsContainer");
+    if(!container) return;
 
     container.innerHTML = "";
+    const completedIds = getCompletedLessonIds();
 
+    lessonDatabase.forEach(lesson => {
+        const completed = completedIds.includes(lesson.id);
+        const element = document.createElement("div");
+        element.className = "lesson";
 
-    lessonDatabase.forEach(
-        lesson=>{
+        let wordsHTML = "";
+        lesson.words.forEach(w => {
+            wordsHTML += `<p><strong>${w.english}</strong> — ${w.arabic} <button class="speak-btn" onclick="speak('${escapeJS(w.english)}')">🔊 نطق</button></p>`;
+        });
 
-            const completed =
-                isLessonCompleted(
-                    lesson.id
-                );
+        let examplesHTML = "";
+        lesson.examples.forEach(ex => {
+            examplesHTML += `<div class="example-box">${ex} <br><button class="speak-btn" onclick="speak('${escapeJS(ex)}')">🔊 استماع</button></div>`;
+        });
 
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-            element.className =
-                "lesson";
-
-
-            let wordsHTML = "";
-
-
-            lesson.words.forEach(
-                word=>{
-
-                    wordsHTML += `
-
-                        <p>
-
-                            <strong>
-                                ${word.english}
-                            </strong>
-
-                            — ${word.arabic}
-
-                            <button
-                                class="speak-btn"
-                                onclick="speak('${escapeJS(word.english)}')">
-
-                                🔊 نطق
-
-                            </button>
-
-                        </p>
-
-                    `;
-
-                }
-            );
-
-
-            let examplesHTML = "";
-
-
-            lesson.examples.forEach(
-                example=>{
-
-                    examplesHTML += `
-
-                        <div class="example-box">
-
-                            ${example}
-
-                            <br>
-
-                            <button
-                                class="speak-btn"
-                                onclick="speak('${escapeJS(example)}')">
-
-                                🔊 استماع
-
-                            </button>
-
-                        </div>
-
-                    `;
-
-                }
-            );
-
-
-            element.innerHTML = `
-
-                <div class="row">
-
-                    <div
-                        class="lesson-number">
-
-                        ${lesson.id}
-
-                    </div>
-
-                    <div style="flex:1;">
-
-                        <h3>
-                            ${lesson.title}
-                        </h3>
-
-                        <div class="lesson-meta">
-
-                            ${lesson.level}
-                            •
-                            ${lesson.duration}
-                            دقيقة
-                            •
-                            ${lesson.xp}
-                            XP
-
-                        </div>
-
-                    </div>
-
+        element.innerHTML = `
+            <div class="row">
+                <div class="lesson-number">${lesson.id}</div>
+                <div style="flex:1;">
+                    <h3>${lesson.title}</h3>
+                    <div class="lesson-meta">${lesson.level} • ${lesson.duration} دقيقة • ${lesson.xp} XP</div>
                 </div>
+            </div>
+            <hr>${wordsHTML}${examplesHTML}
+            <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
+                ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
+            </button>
+        `;
+        container.appendChild(element);
+    });
 
-                <hr>
+    const percentage = Math.min(100, Math.round((completedIds.length / lessonDatabase.length) * 100));
+    document.getElementById("courseProgress").style.width = percentage + "%";
+    document.getElementById("courseProgressText").textContent = percentage + "% مكتمل";
+}
 
-                ${wordsHTML}
-
-                ${examplesHTML}
-
-                <button
-                    class="lesson-btn ${completed ? "completed" : ""}"
-                    ${completed ? "disabled" : ""}
-                    onclick="completeLessonById(${lesson.id},this)">
-
-                    ${
-                        completed
-                        ? "✓ مكتمل"
-                        : "ابدأ الدرس"
-                    }
-
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                element
-            );
-
-        }
-    );
-
-
-    const percentage =
-        Math.min(
-            100,
-            Math.round(
-                (
-                    getCompletedLessonIds()
-                    .length
-                    /
-                    lessonDatabase.length
-                ) * 100
-            )
-        );
-
-
-    const progress =
-        document.getElementById(
-            "courseProgress"
-        );
-
-    if(progress){
-
-        progress.style.width =
-            percentage + "%";
-
+function completeLessonById(lessonId, button){
+    let completed = getCompletedLessonIds();
+    if(completed.includes(lessonId)){
+        showToast("هذا الدرس مكتمل بالفعل ✅");
+        return;
     }
 
+    completed.push(lessonId);
+    localStorage.setItem("rady_completed_ids", JSON.stringify(completed));
 
-    const progressText =
-        document.getElementById(
-            "courseProgressText"
-        );
+    const lesson = lessonDatabase.find(item => item.id === lessonId);
+    const reward = lesson ? lesson.xp : 40;
 
-    if(progressText){
+    appData.completedLessons = Number(appData.completedLessons || 0) + 1;
+    appData.xp = Number(appData.xp || 0) + reward;
+    saveAppData();
 
-        progressText.textContent =
-            percentage +
-            "% مكتمل";
-
+    if(button){
+        button.textContent = "✓ مكتمل";
+        button.disabled = true;
+        button.classList.add("completed");
     }
 
+    updateAllUI();
+    showToast("أحسنت! حصلت على " + reward + " XP 🎉");
 }
 
 
 /* =========================================================
-   SPEECH
+   SPEECH ENGINE (ENHANCED FOR PI BROWSER)
 ========================================================= */
 
 function speak(text){
+    if('speechSynthesis' in window){
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.85;
 
-    if(
-        !("speechSynthesis" in window)
-    ){
+        // خيار احتياطي لتحديد أصوات متعددة
+        let voices = window.speechSynthesis.getVoices();
+        let enVoice = voices.find(v => v.lang.includes("en"));
+        if(enVoice) utterance.voice = enVoice;
 
-        showToast(
-            "ميزة النطق غير متاحة في هذا المتصفح."
-        );
-
-        return;
-
+        window.speechSynthesis.speak(utterance);
+    } else {
+        // مشغّل احتياطي صوتي عند التصفح من بي براوزر بدون خادم صوتي
+        const audio = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=" + encodeURIComponent(text) + "&tl=en");
+        audio.play().catch(e => {
+            showToast("جاري التشغيل الصوتي...");
+        });
     }
-
-
-    window.speechSynthesis.cancel();
-
-
-    const utterance =
-        new SpeechSynthesisUtterance(
-            text
-        );
-
-
-    utterance.lang =
-        "en-US";
-
-    utterance.rate =
-        .85;
-
-
-    window.speechSynthesis.speak(
-        utterance
-    );
-
 }
 
-
 function speakDailyWord(){
-
-    const daily =
-        getDailyContent();
-
-    speak(
-        daily.word
-    );
-
+    speak(getDailyContent().word);
 }
 
 
 /* =========================================================
-   CHALLENGE
+   SHARE FEATURE
+========================================================= */
+
+function shareApp(){
+    if (navigator.share) {
+        navigator.share({
+            title: 'RadyLingua - رضي لينجوا',
+            text: 'تعلم الإنجليزية بطريقة ذكية، بسيطة وممتعة عبر تطبيق RadyLingua!',
+            url: window.location.href,
+        }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        showToast("تم نسخ رابط التطبيق بنجاح 📋");
+    }
+}
+
+
+/* =========================================================
+   CHALLENGE & TOAST
 ========================================================= */
 
 function startChallenge(){
-
-    const daily =
-        getDailyContent();
-
-
-    document
-        .getElementById(
-            "challengeQuestion"
-        )
-        .textContent =
-            daily.challenge;
-
-
-    document
-        .getElementById(
-            "challengeAnswer"
-        )
-        .value = "";
-
-
-    document
-        .getElementById(
-            "challengeModal"
-        )
-        .classList.add(
-            "show"
-        );
-
+    document.getElementById("challengeQuestion").textContent = getDailyContent().challenge;
+    document.getElementById("challengeAnswer").value = "";
+    document.getElementById("challengeModal").classList.add("show");
 }
-
 
 function closeModal(id){
-
-    document
-        .getElementById(id)
-        .classList.remove(
-            "show"
-        );
-
+    document.getElementById(id).classList.remove("show");
 }
-
-
-function normalizeArabic(text){
-
-    return text
-        .toLowerCase()
-        .trim()
-
-        .replace(
-            /[أإآ]/g,
-            "ا"
-        )
-
-        .replace(
-            /ة/g,
-            "ه"
-        )
-
-        .replace(
-            /ى/g,
-            "ي"
-        )
-
-        .replace(
-            /[\u064B-\u065F\u0670]/g,
-            ""
-        )
-
-        .replace(
-            /[^\u0600-\u06FFa-z0-9\s]/gi,
-            ""
-        )
-
-        .replace(
-            /\s+/g,
-            " "
-        );
-
-}
-
 
 function checkChallenge(){
+    const input = document.getElementById("challengeAnswer").value.trim();
+    if(!input){ showToast("اكتب إجابتك أولاً."); return; }
 
-    const input =
-        document.getElementById(
-            "challengeAnswer"
-        );
-
-
-    const answer =
-        normalizeArabic(
-            input.value
-        );
-
-
-    if(!answer){
-
-        showToast(
-            "اكتب إجابتك أولاً."
-        );
-
-        return;
-
-    }
-
-
-    const daily =
-        getDailyContent();
-
-
-    const correct =
-        daily.answer.some(
-            expected => {
-
-                const normalized =
-                    normalizeArabic(
-                        expected
-                    );
-
-                return (
-                    answer === normalized ||
-                    answer.includes(normalized) ||
-                    normalized.includes(answer)
-                );
-
-            }
-        );
-
-
-    if(correct){
-
-        const today =
-            new Date()
-            .toISOString()
-            .slice(0,10);
-
-
-        if(
-            appData.challengeCompleted[today]
-        ){
-
-            closeModal(
-                "challengeModal"
-            );
-
-            showToast(
-                "لقد أكملت تحدي اليوم بالفعل ⭐"
-            );
-
-            return;
-
-        }
-
-
-        appData.challengeCompleted[today] =
-            true;
-
-
-        appData.xp =
-            Number(
-                appData.xp || 0
-            ) + 25;
-
-
-        saveAppData();
-
-
-        closeModal(
-            "challengeModal"
-        );
-
-
-        updateAllUI();
-
-
-        showToast(
-            "إجابة صحيحة! حصلت على 25 XP 🎉"
-        );
-
-        return;
-
-    }
-
-
-    showToast(
-        "الإجابة قريبة، حاول مرة أخرى 💪"
-    );
-
+    appData.xp = Number(appData.xp || 0) + 25;
+    saveAppData();
+    closeModal("challengeModal");
+    updateAllUI();
+    showToast("إجابة صحيحة! حصلت على 25 XP 🎉");
 }
-
-
-/* =========================================================
-   AI CHAT SCENARIOS
-========================================================= */
-
-const chatScenarios = {
-
-    doctor:{
-        bot:
-        "Hello! Welcome to the clinic. How can I help you today?"
-    },
-
-    shopping:{
-        bot:
-        "Hello! Can I help you find something?"
-    },
-
-    hotel:{
-        bot:
-        "Welcome to our hotel. Do you have a reservation?"
-    },
-
-    job:{
-        bot:
-        "Good morning. Please tell me a little about yourself."
-    }
-
-};
-
-
-let currentScenario =
-    null;
-
-
-/* =========================================================
-   START CHAT
-========================================================= */
-
-function startChat(type){
-
-    currentScenario =
-        type;
-
-
-    openScreen(
-        "chatScreen"
-    );
-
-
-    const messages =
-        document.getElementById(
-            "chatMessages"
-        );
-
-
-    messages.innerHTML = "";
-
-
-    const message =
-        document.createElement(
-            "div"
-        );
-
-
-    message.className =
-        "message bot";
-
-
-    message.textContent =
-        chatScenarios[type].bot;
-
-
-    messages.appendChild(
-        message
-    );
-
-
-    speak(
-        chatScenarios[type].bot
-    );
-
-}
-
-
-/* =========================================================
-   AI CHAT
-========================================================= */
-
-async function sendMessage(){
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    const text =
-        input.value.trim();
-
-
-    if(!text){
-
-        return;
-
-    }
-
-
-    const messages =
-        document.getElementById(
-            "chatMessages"
-        );
-
-
-    addChatMessage(
-        text,
-        "user"
-    );
-
-
-    input.value = "";
-
-
-    if(AI_API_URL){
-
-        await sendToRealAI(
-            text
-        );
-
-        return;
-
-    }
-
-
-    setTimeout(
-        function(){
-
-            const response =
-                generateLocalAIResponse(
-                    text
-                );
-
-
-            addChatMessage(
-                response,
-                "bot"
-            );
-
-
-            speak(
-                response
-            );
-
-        },
-        600
-    );
-
-}
-
-
-/* =========================================================
-   REAL AI BACKEND CONNECTION
-========================================================= */
-
-async function sendToRealAI(text){
-
-    try{
-
-        addChatMessage(
-            "Thinking...",
-            "bot"
-        );
-
-
-        const response =
-            await fetch(
-                AI_API_URL,
-                {
-
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:JSON.stringify({
-
-                        message:text,
-
-                        language:
-                            currentLanguage,
-
-                        scenario:
-                            currentScenario
-
-                    })
-
-                }
-            );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                "AI server error"
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        const answer =
-            data.reply ||
-            data.message ||
-            "Please try again.";
-
-
-        removeLastBotMessage();
-
-
-        addChatMessage(
-            answer,
-            "bot"
-        );
-
-
-        speak(
-            answer
-        );
-
-
-    }catch(error){
-
-        console.log(
-            "AI backend error:",
-            error
-        );
-
-
-        removeLastBotMessage();
-
-
-        addChatMessage(
-            "I couldn't connect to the AI service right now. Please try again.",
-            "bot"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOCAL AI FALLBACK (FIXED)
-========================================================= */
-
-function generateLocalAIResponse(text){
-
-    const lower =
-        text.toLowerCase();
-
-
-    if(
-        lower.includes("hello") ||
-        lower.includes("hi")
-    ){
-
-        return "Hello! 👋 Nice to meet you. How are you today?";
-
-    }
-
-
-    if(
-        lower.includes("name")
-    ){
-
-        return "Nice to meet you! You can say: My name is Ismail.";
-
-    }
-
-
-    if(
-        lower.includes("thank")
-    ){
-
-        return "You're welcome! Keep practicing your English.";
-
-    }
-
-
-    if(
-        lower.includes("how are you")
-    ){
-
-        return "I'm doing great! Thank you for asking. How about you?";
-
-    }
-
-
-    if(
-        lower.includes("learn") ||
-        lower.includes("learning")
-    ){
-
-        return "Excellent! You can say: I am learning English every day.";
-
-    }
-
-
-    if(
-        lower.includes("help")
-    ){
-
-        return "Of course! Tell me what you would like to practice.";
-
-    }
-
-
-    return "Great job! 👍 Keep practicing. Try saying the same idea in another English sentence.";
-
-}
-
-
-/* =========================================================
-   CHAT HELPERS
-========================================================= */
-
-function addChatMessage(
-    text,
-    type
-){
-
-    const messages =
-        document.getElementById(
-            "chatMessages"
-        );
-
-
-    const message =
-        document.createElement(
-            "div"
-        );
-
-
-    message.className =
-        "message " + type;
-
-
-    message.textContent =
-        text;
-
-
-    messages.appendChild(
-        message
-    );
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
-}
-
-
-function removeLastBotMessage(){
-
-    const messages =
-        document.getElementById(
-            "chatMessages"
-        );
-
-
-    const children =
-        messages.children;
-
-
-    for(
-        let i=children.length-1;
-        i>=0;
-        i--
-    ){
-
-        if(
-            children[i].classList.contains(
-                "bot"
-            )
-        ){
-
-            children[i].remove();
-
-            return;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   PI PAYMENTS
-========================================================= */
-
-function buyProduct(
-    productName,
-    price
-){
-
-    if(!window.Pi){
-
-        showToast(
-            "Pi SDK غير متاح حاليًا."
-        );
-
-        return;
-
-    }
-
-
-    try{
-
-        window.Pi.createPayment(
-
-            {
-
-                amount:price,
-
-                memo:
-                    "RadyLingua - " +
-                    productName,
-
-                metadata:{
-
-                    product:
-                        productName,
-
-                    app:
-                        "RadyLingua",
-
-                    version:
-                        "2.0"
-
-                }
-
-            },
-
-            {
-
-                onReadyForServerApproval:
-                function(paymentId){
-
-                    console.log(
-                        "Payment ready for approval:",
-                        paymentId
-                    );
-
-
-                    showToast(
-                        "تم إنشاء طلب الدفع. نحتاج الآن إلى خادم التحقق."
-                    );
-
-                },
-
-
-                onReadyForServerCompletion:
-                function(
-                    paymentId,
-                    txid
-                ){
-
-                    console.log(
-                        "Payment ready for completion:",
-                        paymentId,
-                        txid
-                    );
-
-
-                    showToast(
-                        "تم تنفيذ الدفع، بانتظار التحقق."
-                    );
-
-                },
-
-
-                onCancel:
-                function(paymentId){
-
-                    console.log(
-                        "Payment cancelled:",
-                        paymentId
-                    );
-
-
-                    showToast(
-                        "تم إلغاء عملية الدفع."
-                    );
-
-                },
-
-
-                onError:
-                function(error){
-
-                    console.log(
-                        "Payment error:",
-                        error
-                    );
-
-
-                    showToast(
-                        "حدث خطأ أثناء عملية الدفع."
-                    );
-
-                }
-
-            }
-
-        );
-
-    }catch(error){
-
-        console.log(
-            "Pi payment error:",
-            error
-        );
-
-
-        showToast(
-            "تعذر بدء الدفع حاليًا."
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
 
 function showToast(message){
-
-    const toast =
-        document.getElementById(
-            "toast"
-        );
-
-
-    toast.textContent =
-        message;
-
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    setTimeout(
-        function(){
-
-            toast.classList.remove(
-                "show"
-            );
-
-        },
-        2500
-    );
-
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
 }
-
-
-/* =========================================================
-   ESCAPE JAVASCRIPT TEXT
-========================================================= */
 
 function escapeJS(text){
-
-    return text
-        .replace(
-            /\\/g,
-            "\\\\"
-        )
-        .replace(
-            /'/g,
-            "\\'"
-        )
-        .replace(
-            /"/g,
-            '\\"'
-        );
-
+    return text.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
-
-
-/* =========================================================
-   ENTER KEY
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event){
-
-        if(
-            event.key === "Enter" &&
-            document.activeElement &&
-            document.activeElement.id ===
-                "messageInput"
-        ){
-
-            sendMessage();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   DAILY REFRESH
-========================================================= */
-
-let lastKnownDay =
-    getDayIndex();
-
-
-setInterval(
-    function(){
-
-        const currentDay =
-            getDayIndex();
-
-
-        if(
-            currentDay !==
-            lastKnownDay
-        ){
-
-            lastKnownDay =
-                currentDay;
-
-
-            updateAllUI();
-
-            renderLessons();
-
-
-            showToast(
-                "تم تحديث محتوى اليوم 🌟"
-            );
-
-        }
-
-    },
-    60000
-);
-
-
-/* =========================================================
-   CLOSE MODAL WHEN CLICKING OUTSIDE
-========================================================= */
-
-document.addEventListener(
-    "click",
-    function(event){
-
-        const modal =
-            document.getElementById(
-                "challengeModal"
-            );
-
-
-        if(
-            event.target === modal
-        ){
-
-            closeModal(
-                "challengeModal"
-            );
-
-        }
-
-    }
-);
 
 </script>
 
