@@ -785,7 +785,7 @@ button:disabled{
 
     display:none;
 
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(6,1fr);
 
     z-index:50;
 
@@ -803,7 +803,7 @@ button:disabled{
 
     color:#6b7280;
 
-    font-size:11px;
+    font-size:10px;
 
     display:flex;
 
@@ -946,43 +946,6 @@ button:disabled{
 .share-btn-item.facebook{ background:#1877F2; }
 .share-btn-item.x{ background:#000000; }
 .share-btn-item.copy{ background:#6c757d; grid-column:span 2; }
-
-
-/* ================= RESPONSIVE ================= */
-
-@media(min-width:700px){
-
-    .bottom-nav{
-        max-width:700px;
-
-        margin:auto;
-
-        left:50%;
-
-        transform:translateX(-50%);
-
-        border-radius:20px 20px 0 0;
-    }
-}
-
-@media(max-width:380px){
-
-    .content{
-        padding:12px;
-    }
-
-    .stats{
-        gap:6px;
-    }
-
-    .stat{
-        padding:11px 5px;
-    }
-
-    .action-grid{
-        gap:8px;
-    }
-}
 
 </style>
 
@@ -1133,7 +1096,7 @@ button:disabled{
                 id="levelValue"
                 style="font-size:34px;font-weight:bold;">
 
-                3
+                1
 
             </div>
 
@@ -1160,7 +1123,7 @@ button:disabled{
         <div
             id="levelProgress"
             class="progress-fill"
-            style="width:65%;background:white;">
+            style="width:25%;background:white;">
 
         </div>
 
@@ -1180,7 +1143,7 @@ button:disabled{
     <div class="stat">
 
         <strong id="xpValue">
-            1250
+            0
         </strong>
 
         <span>
@@ -1204,7 +1167,7 @@ button:disabled{
     <div class="stat">
 
         <strong id="lessonCount">
-            3
+            0
         </strong>
 
         <span>
@@ -1412,7 +1375,7 @@ button:disabled{
             <div
                 id="courseProgress"
                 class="progress-fill"
-                style="width:75%;">
+                style="width:0%;">
 
             </div>
 
@@ -1422,7 +1385,7 @@ button:disabled{
             id="courseProgressText"
             class="muted">
 
-            75% مكتمل
+            0% مكتمل
 
         </span>
 
@@ -1563,7 +1526,7 @@ button:disabled{
         <div class="stat">
 
             <strong id="achievementXP">
-                1250
+                0
             </strong>
 
             <span>
@@ -1587,7 +1550,7 @@ button:disabled{
         <div class="stat">
 
             <strong id="completedLessons">
-                3
+                0
             </strong>
 
             <span>
@@ -1851,7 +1814,7 @@ button:disabled{
         </strong>
 
         <button
-            onclick="changeLanguage()">
+            onclick="showWelcome()">
 
             تغيير
 
@@ -2018,6 +1981,19 @@ button:disabled{
     </span>
 
     المتجر
+
+</button>
+
+<button
+    class="nav-btn"
+    data-screen="settingsScreen"
+    onclick="openScreen('settingsScreen')">
+
+    <span class="icon">
+        ⚙️
+    </span>
+
+    الإعدادات
 
 </button>
 
@@ -2204,18 +2180,16 @@ button:disabled{
    USER DATA
 ========================================================= */
 
-let currentLanguage =
-    localStorage.getItem("rady_language") || null;
+let currentLanguage = "ar";
 
 let appData = JSON.parse(
     localStorage.getItem("rady_app_data") || "{}"
 );
 
-if(!appData.xp) appData.xp = 1250;
-if(!appData.completedLessons) appData.completedLessons = 3;
-if(!appData.streak) appData.streak = 7;
-if(!appData.level) appData.level = 3;
-if(!appData.lastChallenge) appData.lastChallenge = "";
+if(appData.xp === undefined) appData.xp = 0;
+if(appData.completedLessons === undefined) appData.completedLessons = 0;
+if(appData.streak === undefined) appData.streak = 7;
+if(appData.level === undefined) appData.level = 1;
 if(!appData.challengeCompleted) appData.challengeCompleted = {};
 
 function saveAppData(){
@@ -2227,10 +2201,10 @@ function saveAppData(){
 
 
 /* =========================================================
-   PI SDK
+   PI SDK & AUTHENTICATION
 ========================================================= */
 
-let piInitialized = false;
+let currentUser = null;
 
 try{
     if(window.Pi){
@@ -2238,11 +2212,31 @@ try{
             version:"2.0",
             sandbox:true
         });
-        piInitialized = true;
     }
-}catch(error){
-    console.log("Pi SDK error:", error);
+}catch(e){
+    console.log("Pi Init Error", e);
 }
+
+function authenticatePiUser(callback){
+    if(window.Pi){
+        const scopes = ['username', 'payments'];
+        window.Pi.authenticate(scopes, onIncompletePaymentFound)
+        .then(function(auth) {
+            currentUser = auth.user;
+            showToast("أهلاً بك " + auth.user.username);
+            if(callback) callback();
+        }).catch(function(error) {
+            console.log("Auth error", error);
+            if(callback) callback();
+        });
+    } else {
+        if(callback) callback();
+    }
+}
+
+function onIncompletePaymentFound(payment) {
+    console.log("Payment found incomplete", payment);
+};
 
 
 /* =========================================================
@@ -2391,36 +2385,14 @@ const dailyContent = [
     challenge:"I practice English every morning.",
     answer:[
         "أنا أمارس الإنجليزية كل صباح",
-        "امارس الإنجليزية كل صباح",
-        "أنا أتمرن على الإنجليزية كل صباح"
-    ]
-},
-
-{
-    word:"learn",
-    arabic:"يتعلم",
-    example:"I learn something new every day.",
-    challenge:"I learn something new every day.",
-    answer:[
-        "أنا أتعلم شيئًا جديدًا كل يوم",
-        "اتعلم شيئا جديدا كل يوم"
+        "امارس الإنجليزية كل صباح"
     ]
 }
 
 ];
 
-
-function getDayIndex(){
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    const diff = now - start;
-    const oneDay = 1000 * 60 * 60 * 24;
-    return Math.floor(diff / oneDay);
-}
-
 function getDailyContent(){
-    const index = getDayIndex() % dailyContent.length;
-    return dailyContent[index];
+    return dailyContent[0];
 }
 
 
@@ -2429,12 +2401,7 @@ function getDailyContent(){
 ========================================================= */
 
 window.addEventListener("load", function(){
-    updateAllUI();
-    if(currentLanguage){
-        startApplication();
-    }else{
-        showWelcome();
-    }
+    showWelcome();
 });
 
 function hideAllScreens(){
@@ -2475,30 +2442,25 @@ function openScreen(id){
 
 function showWelcome(){
     hideAllScreens();
+    document.getElementById("mainApp").style.display = "none";
+    document.getElementById("bottomNav").classList.remove("active");
     document.getElementById("welcomeScreen").classList.add("active");
 }
 
 function selectLanguageFromLanding(language){
-    selectLanguage(language);
+    currentLanguage = language;
+    startApplication();
 }
 
 function loginProvider(provider){
-    showToast("تم الدخول بواسطة " + provider);
-    startApplication();
-}
-
-function selectLanguage(language){
-    currentLanguage = language;
-    localStorage.setItem("rady_language", language);
-    startApplication();
-}
-
-function changeLanguage(){
-    localStorage.removeItem("rady_language");
-    currentLanguage = null;
-    document.getElementById("mainApp").style.display = "none";
-    document.getElementById("bottomNav").classList.remove("active");
-    showWelcome();
+    if(provider === 'Pi Network'){
+        authenticatePiUser(function(){
+            startApplication();
+        });
+    } else {
+        showToast("تم الدخول بواسطة " + provider);
+        startApplication();
+    }
 }
 
 function startApplication(){
@@ -2518,43 +2480,21 @@ function updateAllUI(){
     const daily = getDailyContent();
     const xp = Number(appData.xp || 0);
     const lessons = Number(appData.completedLessons || 0);
-    const streak = Number(appData.streak || 0);
+    const streak = Number(appData.streak || 7);
 
-    const xpElements = ["xpValue", "achievementXP"];
-    xpElements.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.textContent = xp;
-    });
+    document.getElementById("xpValue").textContent = xp;
+    document.getElementById("achievementXP").textContent = xp;
 
-    const lessonElements = ["lessonCount", "completedLessons"];
-    lessonElements.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.textContent = lessons;
-    });
+    document.getElementById("lessonCount").textContent = lessons;
+    document.getElementById("completedLessons").textContent = lessons;
 
-    const days = document.getElementById("daysValue");
-    if(days) days.textContent = streak;
+    document.getElementById("daysValue").textContent = streak;
+    document.getElementById("achievementDays").textContent = streak;
 
-    const achievementDays = document.getElementById("achievementDays");
-    if(achievementDays) achievementDays.textContent = streak;
-
-    const streakText = document.getElementById("streakText");
-    if(streakText) streakText.textContent = streak + " أيام متتالية";
-
-    const word = document.getElementById("dailyWordEnglish");
-    if(word) word.textContent = daily.word;
-
-    const arabic = document.getElementById("dailyWordArabic");
-    if(arabic) arabic.textContent = daily.arabic;
-
-    const example = document.getElementById("dailyExample");
-    if(example) example.textContent = daily.example;
-
-    const challenge = document.getElementById("dailyChallengeSentence");
-    if(challenge) challenge.textContent = daily.challenge;
-
-    const question = document.getElementById("challengeQuestion");
-    if(question) question.textContent = daily.challenge;
+    document.getElementById("dailyWordEnglish").textContent = daily.word;
+    document.getElementById("dailyWordArabic").textContent = daily.arabic;
+    document.getElementById("dailyExample").textContent = daily.example;
+    document.getElementById("dailyChallengeSentence").textContent = daily.challenge;
 
     updateLevel();
     renderDailyLesson();
@@ -2566,31 +2506,31 @@ function updateLevel(){
     appData.level = level;
     saveAppData();
 
-    const levelElement = document.getElementById("levelValue");
-    if(levelElement) levelElement.textContent = level;
-
+    document.getElementById("levelValue").textContent = level;
     const progress = ((xp % 400) / 400) * 100;
-    const progressElement = document.getElementById("levelProgress");
-    if(progressElement){
-        progressElement.style.width = Math.max(8, progress) + "%";
-    }
+    document.getElementById("levelProgress").style.width = Math.max(8, progress) + "%";
 }
 
 
 /* =========================================================
-   DAILY LESSON
+   LESSONS MANAGEMENT
 ========================================================= */
 
-function getDailyLesson(){
-    const index = getDayIndex() % lessonDatabase.length;
-    return lessonDatabase[index];
+function getCompletedLessonIds(){
+    return JSON.parse(
+        localStorage.getItem("rady_completed_ids") || "[]"
+    );
+}
+
+function isLessonCompleted(id){
+    return getCompletedLessonIds().includes(id);
 }
 
 function renderDailyLesson(){
     const container = document.getElementById("dailyLessonHome");
     if(!container) return;
 
-    const lesson = getDailyLesson();
+    const lesson = lessonDatabase[0];
     const completed = isLessonCompleted(lesson.id);
 
     container.innerHTML = `
@@ -2604,56 +2544,11 @@ function renderDailyLesson(){
                     </div>
                 </div>
             </div>
-            <div class="progress">
-                <div class="progress-fill" style="width:${completed ? 100 : 0}%;"></div>
-            </div>
             <button class="lesson-btn ${completed ? "completed" : ""}" ${completed ? "disabled" : ""} onclick="completeLessonById(${lesson.id}, this)">
                 ${completed ? "✓ مكتمل" : "ابدأ الدرس"}
             </button>
         </div>
     `;
-}
-
-
-/* =========================================================
-   LESSON COMPLETION & RENDER LESSONS
-========================================================= */
-
-function getCompletedLessonIds(){
-    return JSON.parse(
-        localStorage.getItem("rady_completed_ids") || "[]"
-    );
-}
-
-function isLessonCompleted(id){
-    return getCompletedLessonIds().includes(id);
-}
-
-function completeLessonById(lessonId, button){
-    const completed = getCompletedLessonIds();
-    if(completed.includes(lessonId)){
-        showToast("هذا الدرس مكتمل بالفعل ✅");
-        return;
-    }
-
-    completed.push(lessonId);
-    localStorage.setItem("rady_completed_ids", JSON.stringify(completed));
-
-    const lesson = lessonDatabase.find(item => item.id === lessonId);
-    const reward = lesson ? lesson.xp : 40;
-
-    appData.completedLessons = Number(appData.completedLessons || 0) + 1;
-    appData.xp = Number(appData.xp || 0) + reward;
-    saveAppData();
-
-    if(button){
-        button.textContent = "✓ مكتمل";
-        button.disabled = true;
-        button.classList.add("completed");
-    }
-
-    updateAllUI();
-    showToast("أحسنت! حصلت على " + reward + " XP 🎉");
 }
 
 function renderLessons(){
@@ -2724,25 +2619,46 @@ function renderLessons(){
     if(progressText) progressText.textContent = percentage + "% مكتمل";
 }
 
+function completeLessonById(lessonId, button){
+    const completed = getCompletedLessonIds();
+    if(completed.includes(lessonId)){
+        showToast("هذا الدرس مكتمل بالفعل ✅");
+        return;
+    }
+
+    completed.push(lessonId);
+    localStorage.setItem("rady_completed_ids", JSON.stringify(completed));
+
+    const lesson = lessonDatabase.find(item => item.id === lessonId);
+    const reward = lesson ? lesson.xp : 40;
+
+    appData.completedLessons = Number(appData.completedLessons || 0) + 1;
+    appData.xp = Number(appData.xp || 0) + reward;
+    saveAppData();
+
+    if(button){
+        button.textContent = "✓ مكتمل";
+        button.disabled = true;
+        button.classList.add("completed");
+    }
+
+    updateAllUI();
+    showToast("أحسنت! حصلت على " + reward + " XP 🎉");
+}
+
 
 /* =========================================================
-   HYBRID SPEECH ENGINE (100% WORKING IN PI BROWSER)
+   SPEECH ENGINE
 ========================================================= */
 
 function speak(text){
-    let played = false;
-    try {
-        if('speechSynthesis' in window && window.speechSynthesis){
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = "en-US";
-            utterance.rate = 0.85;
-            window.speechSynthesis.speak(utterance);
-            played = true;
-        }
-    } catch(e){}
-
-    if(!played){
+    if('speechSynthesis' in window && window.speechSynthesis){
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+    } else {
         const audio = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=" + encodeURIComponent(text) + "&tl=en");
         audio.play().catch(() => {});
     }
@@ -2865,7 +2781,7 @@ async function sendMessage(){
 
 
 /* =========================================================
-   PI PAYMENTS INTEGRATION
+   PI PAYMENTS INTEGRATION (WITH AUTH)
 ========================================================= */
 
 function buyProduct(productName, price){
@@ -2874,31 +2790,39 @@ function buyProduct(productName, price){
         return;
     }
 
-    try{
-        window.Pi.createPayment({
-            amount: price,
-            memo: "RadyLingua - " + productName,
-            metadata: { product: productName }
-        }, {
-            onReadyForServerApproval: function(paymentId){
-                fetch("/api/approve", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId })
-                }).then(() => showToast("تمت موافقة الخادم على طلب الدفع"));
-            },
-            onReadyForServerCompletion: function(paymentId, txid){
-                fetch("/api/complete", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId, txid })
-                }).then(() => showToast("تم إكمال الدفع بنجاح! 🎉"));
-            },
-            onCancel: function(){ showToast("تم إلغاء عملية الدفع."); },
-            onError: function(){ showToast("حدث خطأ أثناء عملية الدفع."); }
-        });
-    }catch(e){
-        showToast("تعذر بدء الدفع حاليًا.");
+    const startPayment = function(){
+        try{
+            window.Pi.createPayment({
+                amount: price,
+                memo: "RadyLingua - " + productName,
+                metadata: { product: productName }
+            }, {
+                onReadyForServerApproval: function(paymentId){
+                    fetch("/api/approve", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ paymentId })
+                    }).then(() => showToast("تمت موافقة الخادم على طلب الدفع"));
+                },
+                onReadyForServerCompletion: function(paymentId, txid){
+                    fetch("/api/complete", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ paymentId, txid })
+                    }).then(() => showToast("تم إكمال الدفع بنجاح! 🎉"));
+                },
+                onCancel: function(){ showToast("تم إلغاء عملية الدفع."); },
+                onError: function(){ showToast("حدث خطأ أثناء عملية الدفع."); }
+            });
+        }catch(e){
+            showToast("تعذر بدء الدفع حاليًا.");
+        }
+    };
+
+    if(!currentUser){
+        authenticatePiUser(startPayment);
+    } else {
+        startPayment();
     }
 }
 
